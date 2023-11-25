@@ -31,6 +31,7 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
             <th>Program Number</th>
             <th>Program Name</th>
             <th>Program Description</th>
+            <th>Generate Report</th>
             <th>Update</th>
         </tr>
         <?php
@@ -40,6 +41,7 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
                     <td>" . $row['Program_Num'] . "</td>
                     <td>" . $row['Name'] . "</td>
                     <td>" . $row['Description'] . "</td>
+                    <td><button class='generate-report' program-num='" . $row['Program_Num'] . "' program-name='" . $row['Name'] . "' program-description='" . $row['Description'] . "'>Generate Report</button></td>
                     <td><a href='update_program.php?Program_Num=" . $row['Program_Num'] . "'>Update</a></td>
                     </tr>";
                 }
@@ -49,5 +51,32 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
             }
         ?>
     </table>
+
+    <h1>Program Report</h1>
+    <div id="report-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var generateReportButtons = document.querySelectorAll('.generate-report');
+
+            generateReportButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var programNum = this.getAttribute('program-num');
+                    var programName = this.getAttribute('program-name');
+                    var programDescription = this.getAttribute('program-description');
+
+                    generateReport(programNum, programName, programDescription);
+                });
+            });
+
+            function generateReport(programNum, programName, programDescription) {
+                var reportContainer = document.getElementById('report-container');
+                reportContainer.innerHTML = "<h3>Report for Program " + programNum + "</h3>" +
+                    "<p><strong>Name:</strong> " + programName + "</p>" +
+                    "<p><strong>Description:</strong> " + programDescription + "</p>";
+            }
+        });
+    </script>
+
 </body>
 </html>
