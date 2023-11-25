@@ -9,7 +9,7 @@
 <body>
     <h1>Admin Program Information</h1>
     
-    <form action="connect.php" method="POST">
+    <form action="../connect.php" method="POST">
         <label for="name">Program Name</label>
         <input type="text" name="name" id="name" required>
 
