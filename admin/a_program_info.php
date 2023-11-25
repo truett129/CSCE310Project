@@ -1,6 +1,21 @@
 <?php
 include_once '../database.php';
 $result = mysqli_query($conn,"SELECT * FROM programs");
+
+// insert
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isSet($_POST['submit'])){
+    $conn = mysqli_connect('localhost', 'root', '', 'csce310db') or die('Connection failed: ' . mysqli_connect_error());
+    if(isSet($_POST['name']) && isSet($_POST['description'])){
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $sql = "INSERT INTO `programs` (`name`, `description`) VALUES ('$name', '$description')";
+        if(mysqli_query($conn, $sql)){
+            $message = "New record created successfully";
+        } else {
+            $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +30,7 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
     <h1>Admin Program Information</h1>
     
     <h2>Add New Program</h3>
-    <form action="../connect.php" method="POST">
+    <form action="" method="POST">
         <label for="name">Program Name</label>
         <input type="text" name="name" id="name" required>
 
@@ -24,6 +39,11 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
 
         <input type="submit" name='submit' value="Submit">
     </form>
+    <?php if(!empty($message)): ?>
+        <div class="message">
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
 
     <h2>Current Programs</h2>
     <table>
@@ -51,6 +71,7 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
             }
         ?>
     </table>
+    <button><a href="a_program_info.php">Refresh</a></button>
 
     <h2>Program Report</h2>
     <div id="report-container"></div>
