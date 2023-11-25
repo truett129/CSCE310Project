@@ -1,3 +1,8 @@
+<?php
+    include_once '../database.php';
+    $result = mysqli_query($conn,"SELECT Program_Num, Name FROM programs");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +17,16 @@
         <label for="uin">UIN</label>
         <input type="text" name="uin" id="uin" required>
 
-        <!-- replace this with a dropdown menu of programs */ -->
         <label for="program-name">Program Name</label>
-        <input type="text" name="program-name" id="program-name" required>
+        <select name="program-name" id="program-name" required>
+            <?php
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
+                    }
+                }
+            ?>
+        </select>
 
         <label for="uncom-cert">Are you currently enrolled in
         other uncompleted certifications

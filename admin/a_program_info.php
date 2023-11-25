@@ -52,7 +52,7 @@ $result = mysqli_query($conn,"SELECT * FROM programs");
         ?>
     </table>
 
-    <h1>Program Report</h1>
+    <h2>Program Report</h2>
     <div id="report-container"></div>
 
     <script>
