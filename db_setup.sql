@@ -152,4 +152,5 @@ CREATE TABLE Event_Tracking (
     UIN INT,
     FOREIGN KEY (Event_ID) REFERENCES Event(Event_ID),
     FOREIGN KEY (UIN) REFERENCES Users(UIN)
+
 );
