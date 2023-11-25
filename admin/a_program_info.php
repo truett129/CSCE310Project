@@ -9,6 +9,7 @@
 <body>
     <h1>Admin Program Information</h1>
     
+    <h2>Add New Program</h3>
     <form action="../connect.php" method="POST">
         <label for="name">Program Name</label>
         <input type="text" name="name" id="name" required>
@@ -18,6 +19,25 @@
 
         <input type="submit" name='submit' value="Submit">
     </form>
+
+    <h2>Current Programs</h2>
+    <table>
+        <tr>
+            <th>Program Name</th>
+            <th>Program Description</th>
+            <th>Update</th>
+        </tr>
+        <?php
+            $conn = mysqli_connect('localhost', 'root', '', 'csce310db') or die('Connection failed: ' . mysqli_connect_error());
+            $sql = "SELECT * FROM `programs`";
+            $result = mysqli_query($conn, $sql);
+            if(mysqli_num_rows($result) > 0){
+                while($row = mysqli_fetch_assoc($result)){
+                    echo "<tr><td>" . $row['Name'] . "</td><td>" . $row['Description'] . "</td><td><a href='update_program.php?name=" . $row['Name'] . "'>Update</a></td></tr>";
+                }
+            }
+        ?>
+    </table>
 
 </body>
 </html>
