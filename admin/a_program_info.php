@@ -1,3 +1,8 @@
+<?php
+include_once '../database.php';
+$result = mysqli_query($conn,"SELECT * FROM programs");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,21 +28,26 @@
     <h2>Current Programs</h2>
     <table>
         <tr>
+            <th>Program Number</th>
             <th>Program Name</th>
             <th>Program Description</th>
             <th>Update</th>
         </tr>
         <?php
-            $conn = mysqli_connect('localhost', 'root', '', 'csce310db') or die('Connection failed: ' . mysqli_connect_error());
-            $sql = "SELECT * FROM `programs`";
-            $result = mysqli_query($conn, $sql);
             if(mysqli_num_rows($result) > 0){
                 while($row = mysqli_fetch_assoc($result)){
-                    echo "<tr><td>" . $row['Name'] . "</td><td>" . $row['Description'] . "</td><td><a href='update_program.php?name=" . $row['Name'] . "'>Update</a></td></tr>";
+                    echo "<tr>
+                    <td>" . $row['Program_Num'] . "</td>
+                    <td>" . $row['Name'] . "</td>
+                    <td>" . $row['Description'] . "</td>
+                    <td><a href='update_program.php?Program_Num=" . $row['Program_Num'] . "'>Update</a></td>
+                    </tr>";
                 }
+            }
+            else{
+                echo "<tr><td colspan='4'>No programs found</td></tr>";
             }
         ?>
     </table>
-
 </body>
 </html>
