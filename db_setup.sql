@@ -1,6 +1,6 @@
 -- Users Table
 CREATE TABLE Users (
-    UIN INT PRIMARY KEY,
+    UIN INT AUTO_INCREMENT PRIMARY KEY,
     First_Name VARCHAR(255),
     M_Initial CHAR(1),
     Last_Name VARCHAR(255),
@@ -13,7 +13,7 @@ CREATE TABLE Users (
 
 -- College Student Table
 CREATE TABLE College_Student (
-    UIN INT PRIMARY KEY,
+    UIN INT AUTO_INCREMENT PRIMARY KEY,
     Gender VARCHAR(255),
     Hispanic_Latino BOOLEAN,
     Race VARCHAR(255),
@@ -34,7 +34,7 @@ CREATE TABLE College_Student (
 
 -- Certification Table
 CREATE TABLE Certification (
-    Cert_ID INT PRIMARY KEY,
+    Cert_ID INT AUTO_INCREMENT PRIMARY KEY,
     Level VARCHAR(255),
     Name VARCHAR(255),
     Description VARCHAR(255)
@@ -42,7 +42,7 @@ CREATE TABLE Certification (
 
 -- Internship Table
 CREATE TABLE Internship (
-    Intern_ID INT PRIMARY KEY,
+    Intern_ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Description VARCHAR(255),
     Is_Gov BOOLEAN
@@ -50,7 +50,7 @@ CREATE TABLE Internship (
 
 -- Programs Table
 CREATE TABLE Programs (
-    Program_Num INT PRIMARY KEY,
+    Program_Num INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Description VARCHAR(255)
 );
@@ -59,14 +59,14 @@ CREATE TABLE Programs (
 CREATE TABLE Track (
     Program_Num INT,
     Student_Num INT,
-    Tracking_Num INT PRIMARY KEY,
+    Tracking_Num INT AUTO_INCREMENT PRIMARY KEY,
     FOREIGN KEY (Program_Num) REFERENCES Programs(Program_Num),
     FOREIGN KEY (Student_Num) REFERENCES College_Student(UIN)
 );
 
 -- Classes Table
 CREATE TABLE Classes (
-    Class_ID INT PRIMARY KEY,
+    Class_ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Description VARCHAR(255),
     Type VARCHAR(255)
@@ -74,7 +74,7 @@ CREATE TABLE Classes (
 
 -- Class Enrollment Table
 CREATE TABLE Class_Enrollment (
-    CE_NUM INT PRIMARY KEY,
+    CE_NUM INT AUTO_INCREMENT PRIMARY KEY,
     UIN INT,
     Class_ID INT,
     Status VARCHAR(255),
@@ -86,7 +86,7 @@ CREATE TABLE Class_Enrollment (
 
 -- Cert Enrollment Table
 CREATE TABLE Cert_Enrollment (
-    CertE_Num INT PRIMARY KEY,
+    CertE_Num INT AUTO_INCREMENT PRIMARY KEY,
     UIN INT,
     Cert_ID INT,
     Status VARCHAR(255),
@@ -101,7 +101,7 @@ CREATE TABLE Cert_Enrollment (
 
 -- Intern App Table
 CREATE TABLE Intern_App (
-    IA_Num INT PRIMARY KEY,
+    IA_Num INT AUTO_INCREMENT PRIMARY KEY,
     UIN INT,
     Intern_ID INT,
     Status VARCHAR(255),
@@ -112,7 +112,7 @@ CREATE TABLE Intern_App (
 
 -- Applications Table
 CREATE TABLE Applications (
-    App_Num INT PRIMARY KEY,
+    App_Num INT AUTO_INCREMENT PRIMARY KEY,
     Program_Num INT,
     UIN INT,
     Uncom_Cert VARCHAR(255),
@@ -124,7 +124,7 @@ CREATE TABLE Applications (
 
 -- Document Table
 CREATE TABLE Document (
-    Doc_Num INT PRIMARY KEY,
+    Doc_Num INT AUTO_INCREMENT PRIMARY KEY,
     App_Num INT,
     Link VARCHAR(255),
     Doc_Type VARCHAR(255),
@@ -133,7 +133,7 @@ CREATE TABLE Document (
 
 -- Event Table
 CREATE TABLE Event (
-    Event_ID INT PRIMARY KEY,
+    Event_ID INT AUTO_INCREMENT PRIMARY KEY,
     UIN INT,
     Program_Num INT,
     Start_Date DATE,
@@ -147,7 +147,7 @@ CREATE TABLE Event (
 
 -- Event Tracking Table
 CREATE TABLE Event_Tracking (
-    ET_Num INT PRIMARY KEY,
+    ET_Num INT AUTO_INCREMENT PRIMARY KEY,
     Event_ID INT,
     UIN INT,
     FOREIGN KEY (Event_ID) REFERENCES Event(Event_ID),
