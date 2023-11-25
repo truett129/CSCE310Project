@@ -15,19 +15,26 @@ CSCE 310 TAMCC Project
 - Upload the db_setup.sql file and press "Import" at the bottom
 - You should see a bunch of success messages and see that all of the databases have been created
 
-# Roles on the project
-- Anthony
-* Admin: Program Information Management
-* Student: Application Information Management
-&nbsp;
-- Truett
-* Admin: User Authentication and Roles
-* Student: User Authentication and Roles
-&nbsp;
-- Pranav
-* Admin: Program Progress Tracking
-* Student: Program Progress Tracking
-&nbsp;
-- Abdullah
-* Admin: Event Management
-* Student: Document Upload and Management
+# Roles on the Project
+
+## Anthony
+- **Admin:** Program Information Management
+- **Student:** Application Information Management
+
+---
+
+## Truett
+- **Admin:** User Authentication and Roles
+- **Student:** User Authentication and Roles
+
+---
+
+## Pranav
+- **Admin:** Program Progress Tracking
+- **Student:** Program Progress Tracking
+
+---
+
+## Abdullah
+- **Admin:** Event Management
+- **Student:** Document Upload and Management
