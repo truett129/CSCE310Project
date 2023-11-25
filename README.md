@@ -14,3 +14,20 @@ CSCE 310 TAMCC Project
 - Click on the database on the left side of the screen and go to the tab that says "Import"
 - Upload the db_setup.sql file and press "Import" at the bottom
 - You should see a bunch of success messages and see that all of the databases have been created
+
+# Roles on the project
+- Anthony
+* Admin: Program Information Management
+* Student: Application Information Management
+&nbsp;
+- Truett
+* Admin: User Authentication and Roles
+* Student: User Authentication and Roles
+&nbsp;
+- Pranav
+* Admin: Program Progress Tracking
+* Student: Program Progress Tracking
+&nbsp;
+- Abdullah
+* Admin: Event Management
+* Student: Document Upload and Management
