@@ -24,26 +24,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isSet($_POST['submit'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    <?php include '../css/styles.css'; ?>
+    </style>
     <title>Admin Program Information</title>
 </head>
 <body>
     <h1>Admin Program Information</h1>
-    
-    <h2>Add New Program</h3>
-    <form action="" method="POST">
-        <label for="name">Program Name</label>
-        <input type="text" name="name" id="name" required>
-
-        <label for="description">Program Description</label>
-        <input type="text" name="description" id="description" required>
-
-        <input type="submit" name='submit' value="Submit">
-    </form>
-    <?php if(!empty($message)): ?>
-        <div class="message">
-            <?php echo $message; ?>
-        </div>
-    <?php endif; ?>
+    <div class="new-program-form">
+        <h2>Add New Program</h3>
+        <form action="" method="POST">
+            <div class="input-label">
+                <label for="name">Program Name</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div class="input-label">
+                <label for="description">Program Description</label>
+                <input type="text" name="description" id="description" required>
+            </div>
+            <input type="submit" name='submit' value="Submit">
+        </form>
+        <?php if(!empty($message)): ?>
+            <div class="message">
+                <?php echo $message; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
     <h2>Current Programs</h2>
     <table>
