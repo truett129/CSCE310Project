@@ -71,7 +71,7 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
                         <label for="purpose-statement">Purpose Statement</label>
                         <textarea name="purpose-statement" id="purpose-statement" required></textarea>
                     </div>
-                    <input type="submit" name='submit' value="Submit" class="button">
+                    <input class="button"  type="submit" name='submit' value="Submit" class="button">
                 </form>
                 <?php if (!empty($message)): ?>
                     <div class="message">
