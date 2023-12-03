@@ -62,6 +62,9 @@ $sql = "SELECT Track.*, Programs.Name FROM Track
         WHERE Track.Student_Num = $uin";
 
 $progress = mysqli_query($conn, $sql);
+
+// Fetch all programs for the dropdown
+$programsResult = mysqli_query($conn, "SELECT Program_Num, Name FROM Programs");
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +91,13 @@ $progress = mysqli_query($conn, $sql);
                 <form action="" method="POST">
                     <div class="input-label">
                         <label for="program_num">Program Name</label>
-                        <input type="text" name="program_num" id="program_num" required>
+                        <select name="program_num" id="program_num" required>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($programsResult)) {
+                                echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="input-label">
                         <label for="tracking_num">Tracking Number (optional, for updates)</label>
