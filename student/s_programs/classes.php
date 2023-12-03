@@ -94,7 +94,7 @@ while ($row = mysqli_fetch_assoc($classResult)) {
 <body>
     <header>
         <h1>Program Progress Tracking</h1>
-        <div class="header-links"><a href="../index.php" class="button">Back to Home</a></div>
+        <div class="header-links"><a href="../../index.php" class="button">Back to Home</a></div>
     </header>
     <div class="container">
         <div class="content">
