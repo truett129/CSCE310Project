@@ -1,14 +1,28 @@
 <?php
+session_start();
+
+// Ensure the user is logged in and has a UIN set in the session
+if (!isset($_SESSION['UIN'])) {
+    die("User not logged in or UIN not set");
+}
+
+$userUIN = $_SESSION['UIN'];
+
 include_once '../database.php';
+
+// Fetch programs for dropdown
 $result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs");
 
-// insert
-if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
-    $uin = $_POST['uin'];
+$message = '';
+
+// Insert new application
+if (isset($_POST['submit'])) {
+    $uin = $userUIN;  // Use the UIN from the session
     $program_num = $_POST['program-num'];
     $uncom_cert = $_POST['uncom-cert'];
     $com_cert = $_POST['com-cert'];
     $purpose_statement = $_POST['purpose-statement'];
+
     $sql = "INSERT INTO `applications` (`uin`, `program_num`, `uncom_cert`, `com_cert`, `purpose_statement`) VALUES ('$uin', '$program_num', '$uncom_cert', '$com_cert', '$purpose_statement')";
     if (mysqli_query($conn, $sql)) {
         $message = "New record created successfully";
@@ -16,6 +30,9 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
         $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 }
+
+// Fetch only the applications belonging to the logged-in user
+$applicationResult = mysqli_query($conn, "SELECT applications.*, programs.Name FROM applications INNER JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.uin = $userUIN");
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +44,6 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         <?php include '../css/styles.css'; ?>
-        < !-- Ensure the path is correct -->
     </style>
     <title>Student Application Information</title>
 </head>
@@ -43,14 +59,12 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
                 <h2>New Application Form</h2>
                 <form action="" method="POST">
                     <div class="input-label">
-                        <label for="uin">UIN</label>
-                        <input type="text" name="uin" id="uin" required>
+                        <input type="hidden" name="uin" id="uin" value="<?php echo $userUIN; ?>" required>
                     </div>
                     <div class="input-label">
                         <label for="program-num">Program Name</label>
                         <select name="program-num" id="program-num" required>
                             <?php
-                            // Assuming $result contains program data
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
@@ -91,10 +105,8 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
                         <th>Delete</th>
                     </tr>
                     <?php
-                    $userUIN = 230002124;  // Example UIN
-                    $result = mysqli_query($conn, "SELECT applications.*, programs.Name FROM applications INNER JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.uin = $userUIN");
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
+                    if (mysqli_num_rows($applicationResult) > 0) {
+                        while ($row = mysqli_fetch_assoc($applicationResult)) {
                             echo "<tr>
                             <td>" . $row['Name'] . "</td>
                             <td>N/A</td>
@@ -108,7 +120,6 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
                     }
                     ?>
                 </table>
-                <button class="button"><a href="s_application_info.php">Refresh</a></button>
             </section>
         </div>
     </div>
