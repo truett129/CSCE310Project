@@ -155,5 +155,8 @@ CREATE TABLE Event_Tracking (
 
 );
 
-
+-- update and delete on cascade for App_Num in Document table
 ALTER TABLE `Document` DROP FOREIGN KEY `document_ibfk_1`; ALTER TABLE `Document` ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`App_Num`) REFERENCES `Applications`(`App_Num`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- update and delete on cascade for Program_Num , and UIN  in Track table
+ALTER TABLE `Track` DROP FOREIGN KEY `track_ibfk_1`; ALTER TABLE `Track` ADD CONSTRAINT `track_ibfk_1` FOREIGN KEY (`Program_Num`) REFERENCES `Programs`(`Program_Num`) ON DELETE CASCADE ON UPDATE CASCADE; ALTER TABLE `Track` DROP FOREIGN KEY `track_ibfk_2`; ALTER TABLE `Track` ADD CONSTRAINT `track_ibfk_2` FOREIGN KEY (`Student_Num`) REFERENCES `College_Student`(`UIN`) ON DELETE CASCADE ON UPDATE CASCADE;

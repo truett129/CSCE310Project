@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+// Ensure the user is logged in and is an admin
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
+    die("Access denied: User not logged in or not an admin.");
+}
+
+
 include_once '../database.php';
 $result = mysqli_query($conn, "SELECT * FROM programs");
 
@@ -95,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
             <div id="report-container"></div>
         </div>
     </div>
-<!-- 
+    <!-- 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var generateReportButtons = document.querySelectorAll('.generate-report');

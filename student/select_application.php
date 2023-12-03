@@ -1,9 +1,17 @@
 <?php
-    include_once '../database.php';
+
+session_start();
+
+// Ensure the user is logged in and is an student
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
+    die("Access denied: User not logged in or not an student.");
+}
+include_once '../database.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +21,7 @@
     </style>
     <title>Document</title>
 </head>
+
 <body>
     <header>
         <h1>Student Application Information</h1>
@@ -29,16 +38,16 @@
                             <input type="text" name="uin" id="uin" value=<?php echo $_GET['uin'] ?> readonly>
                         </div>
                         <div class="input-label">
-                        <label for="program-name">Program Name</label>
-                        <input type="text" name="program-name" id="program-name" value="<?php
+                            <label for="program-name">Program Name</label>
+                            <input type="text" name="program-name" id="program-name" value="<?php
 
                             $programNum = mysqli_real_escape_string($conn, $_GET['program_num']);
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
                             $result = mysqli_query($conn, $query);
-                            
+
                             if ($result) {
                                 $row = mysqli_fetch_assoc($result);
-                                
+
                                 if ($row) {
                                     echo htmlspecialchars($row['Name']);
                                 } else {
@@ -47,38 +56,42 @@
                             } else {
                                 echo 'Error fetching program';
                             }
-                        ?>" readonly required>
+                            ?>" readonly required>
 
                             </select>
                         </div>
                         <?php
-                            $uin = $_GET['uin'];
-                            $programNum = $_GET['program_num'];
-                            $result = mysqli_query($conn,"SELECT * FROM applications WHERE uin=$uin AND program_num=$programNum");
-                            if ($result) {
-                                $row = mysqli_fetch_assoc($result);
-                            }
+                        $uin = $_GET['uin'];
+                        $programNum = $_GET['program_num'];
+                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE uin=$uin AND program_num=$programNum");
+                        if ($result) {
+                            $row = mysqli_fetch_assoc($result);
+                        }
                         ?>
-                
+
                         <div class="input-label">
                             <label for="uncom-cert">Are you currently enrolled in
-                            other uncompleted certifications
-                            sponsored by the Cybersecurity
-                            Center? (Leave blank if no)</label>
-                            <input type="text" name="uncom-cert" id="uncom-cert" value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>" readonly>
+                                other uncompleted certifications
+                                sponsored by the Cybersecurity
+                                Center? (Leave blank if no)</label>
+                            <input type="text" name="uncom-cert" id="uncom-cert"
+                                value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>" readonly>
                         </div>
-                
+
                         <div class="input-label">
                             <label for="com-cert">Have you completed any
-                            cybersecurity industry
-                            certifications via the
-                            Cybersecurity Center? (Leave blank if no)</label>
-                            <input type="text" name="com-cert" id="com-cert" value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>" readonly>
+                                cybersecurity industry
+                                certifications via the
+                                Cybersecurity Center? (Leave blank if no)</label>
+                            <input type="text" name="com-cert" id="com-cert"
+                                value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>" readonly>
                         </div>
-                
+
                         <div class="input-label">
                             <label for="purpose-statement">Purpose Statement</label>
-                            <input type="text" name="purpose-statement" id="purpose-statement" value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>" readonly>
+                            <input type="text" name="purpose-statement" id="purpose-statement"
+                                value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>"
+                                readonly>
                         </div>
                     </form>
                 </div>
@@ -86,4 +99,5 @@
         </div>
     </div>
 </body>
+
 </html>

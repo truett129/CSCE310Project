@@ -2,6 +2,14 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+session_start();
+
+// Ensure the user is logged in and is an admin
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
+    die("Access denied: User not logged in or not an admin.");
+}
+
 include_once '../database.php'; // Adjust the path as needed
 
 $message = '';
