@@ -7,6 +7,11 @@ if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
 include_once '../database.php';
+
+$result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,13 +40,12 @@ include_once '../database.php';
                     <form>
                         <div class="input-label">
                             <label for="uin">UIN</label>
-                            <input type="text" name="uin" id="uin" value=<?php echo $_GET['uin'] ?> readonly>
+                            <input type="text" name="uin" id="uin" value=<?php echo $row['UIN'] ?> readonly>
                         </div>
                         <div class="input-label">
                             <label for="program-name">Program Name</label>
                             <input type="text" name="program-name" id="program-name" value="<?php
-
-                            $programNum = mysqli_real_escape_string($conn, $_GET['program_num']);
+                            $programNum = $row['Program_Num'];
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
                             $result = mysqli_query($conn, $query);
 
@@ -61,9 +65,8 @@ include_once '../database.php';
                             </select>
                         </div>
                         <?php
-                        $uin = $_GET['uin'];
-                        $programNum = $_GET['program_num'];
-                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE uin=$uin AND program_num=$programNum");
+                        $appNum = $_GET['app_num'];
+                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='$appNum'");
                         if ($result) {
                             $row = mysqli_fetch_assoc($result);
                         }

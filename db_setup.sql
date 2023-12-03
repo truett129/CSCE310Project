@@ -6,7 +6,7 @@ CREATE TABLE Users (
     Last_Name VARCHAR(255),
     Username VARCHAR(255),
     Passwords VARCHAR(255),
-    User_Type VARCHAR(255) DEFAULT 'Student',
+    User_Type VARCHAR(255) DEFAULT 'student',
     Email VARCHAR(255),
     Discord_Name VARCHAR(255)
 );

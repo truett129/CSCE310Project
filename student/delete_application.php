@@ -1,15 +1,26 @@
 <?php
+include_once '../database.php';
 session_start();
 
 // Ensure the user is logged in and is an student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
-include_once '../database.php';
+
+$result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+}
+
 if (count($_POST) > 0) {
-    mysqli_query($conn, "DELETE FROM applications WHERE Program_Num='" . $_GET['program_num'] . "' AND UIN='" . $_GET['uin'] . "'");
+    mysqli_query($conn, "DELETE FROM applications WHERE App_Num='" . $row['App_Num'] . "'");
     $message = "Record Deleted Successfully";
 }
+
+
+$programNum = $row['Program_Num'];
+$uin = $row['UIN'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,16 +45,15 @@ if (count($_POST) > 0) {
             <div class="form-container">
                 <h2>View Application</h2>
                 <div class="student-application-form">
-                    <form action="" method="POST">
+                <form action="" method="POST">
                         <div class="input-label">
                             <label for="uin">UIN</label>
-                            <input type="text" name="uin" id="uin" value=<?php echo $_GET['uin'] ?> readonly>
+                            <input type="text" name="uin" id="uin" value=<?php echo $uin ?> readonly>
                         </div>
                         <div class="input-label">
                             <label for="program-name">Program Name</label>
-                            <input type="text" name="program-name" id="program-name" value="<?php
+                            <input type="text" name="program_name" id="program_name" value="<?php
 
-                            $programNum = mysqli_real_escape_string($conn, $_GET['program_num']);
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
                             $result = mysqli_query($conn, $query);
 
@@ -63,39 +73,36 @@ if (count($_POST) > 0) {
                             </select>
                         </div>
                         <?php
-                        $uin = $_GET['uin'];
-                        $programNum = $_GET['program_num'];
-                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE uin=$uin AND program_num=$programNum");
+                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
                         if ($result) {
                             $row = mysqli_fetch_assoc($result);
                         }
                         ?>
 
                         <div class="input-label">
-                            <label for="uncom-cert">Are you currently enrolled in
+                            <label for="uncom_cert">Are you currently enrolled in
                                 other uncompleted certifications
                                 sponsored by the Cybersecurity
                                 Center? (Leave blank if no)</label>
-                            <input type="text" name="uncom-cert" id="uncom-cert"
-                                value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>" readonly>
+                            <input type="text" name="uncom_cert" id="uncom_cert"
+                                value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>">
                         </div>
 
                         <div class="input-label">
-                            <label for="com-cert">Have you completed any
+                            <label for="com_cert">Have you completed any
                                 cybersecurity industry
                                 certifications via the
                                 Cybersecurity Center? (Leave blank if no)</label>
-                            <input type="text" name="com-cert" id="com-cert"
-                                value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>" readonly>
+                            <input type="text" name="com_cert" id="com_cert"
+                                value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>">
                         </div>
 
                         <div class="input-label">
-                            <label for="purpose-statement">Purpose Statement</label>
-                            <input type="text" name="purpose-statement" id="purpose-statement"
-                                value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>"
-                                readonly>
+                            <label for="purpose_statement">Purpose Statement</label>
+                            <input type="text" name="purpose_statement" id="purpose_statement"
+                                value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>">
                         </div>
-                        <input class="button" type="submit" name="delete" value="Delete Application?">
+                        <input class="button" type="submit" name="delete" value="Delete Application">
                         <p>
                             <?php if (isset($message))
                                 echo $message; ?>
