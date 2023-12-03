@@ -9,6 +9,7 @@ $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Extract and sanitize input
+    $uin = mysqli_real_escape_string($conn, $_POST['uin']);
     $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
     $m_initial = mysqli_real_escape_string($conn, $_POST['m_initial']);
     $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
@@ -17,16 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $discord_name = mysqli_real_escape_string($conn, $_POST['discord_name']);
 
-    // SQL to insert new user
-    $sql = "INSERT INTO Users (First_Name, M_Initial, Last_Name, Username, Passwords, Email, Discord_Name) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sssssss", $first_name, $m_initial, $last_name, $username, $password, $email, $discord_name);
-
-    if (mysqli_stmt_execute($stmt)) {
-        $message = "Registration successful!";
+    // Check if the UIN already exists
+    $checkUinSql = "SELECT UIN FROM Users WHERE UIN = '$uin'";
+    $checkUinResult = mysqli_query($conn, $checkUinSql);
+    if (mysqli_num_rows($checkUinResult) > 0) {
+        $message = "Error: UIN already in use.";
     } else {
-        $message = "Error: " . mysqli_error($conn);
+        // SQL to insert new user, now including the UIN
+        $sql = "INSERT INTO Users (UIN, First_Name, M_Initial, Last_Name, Username, Passwords, Email, Discord_Name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "isssssss", $uin, $first_name, $m_initial, $last_name, $username, $password, $email, $discord_name);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $message = "Registration successful!";
+        } else {
+            $message = "Error: " . mysqli_error($conn);
+        }
     }
 }
 ?>
@@ -39,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Texas A&M Cybersecurity</title>
-    <link rel="stylesheet" href="css/styles.css"> <!-- Ensure correct path to style.css -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -50,6 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="form-container">
         <form action="" method="POST">
+            <div class="input-group">
+                <label for="uin">UIN</label>
+                <input type="text" name="uin" id="uin" required>
+            </div>
             <div class="input-group">
                 <label for="first_name">First Name</label>
                 <input type="text" name="first_name" id="first_name" required>
