@@ -1,10 +1,10 @@
 /* TAMU Color Scheme */
 :root {
-  --tamu-maroon: #500000; /* TAMU Maroon */
-  --tamu-white: #ffffff; /* TAMU White */
-  --tamu-gray: #5b6770; /* TAMU Gray */
-  --tamu-silver: #a7a9ac; /* TAMU Silver */
-  --tamu-black: #000000; /* TAMU Black */
+  --tamu-maroon: #500000;
+  --tamu-white: #ffffff;
+  --tamu-gray: #5b6770;
+  --tamu-silver: #a7a9ac;
+  --tamu-black: #000000;
 }
 
 /* Basic Reset */
@@ -83,8 +83,8 @@ footer {
 /* Styles for <a> tag inside .button */
 .button a {
   color: var(--tamu-white);
-  text-decoration: none; /* Removes underline */
-  display: inline; /* Aligns with button's display */
+  text-decoration: none;
+  display: inline;
 }
 
 .button a:hover {
@@ -135,7 +135,7 @@ input[type="date"],
 input[type="email"],
 select,
 textarea {
-  width: calc(100% - 20px); /* Adjust width considering padding */
+  width: calc(100% - 20px);
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -225,7 +225,7 @@ input[type="submit"].button:hover {
 
 .container {
   width: 100%;
-  max-width: 1200px; /* Adjust as needed */
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -241,7 +241,7 @@ input[type="submit"].button:hover {
   background-color: var(--tamu-white);
   padding: 20px;
   margin: 20px auto;
-  max-width: 600px; /* Adjust as needed */
+  max-width: 600px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -275,4 +275,14 @@ input[type="submit"].button:hover {
   background-color: var(--tamu-white);
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.error-message {
+  color: #ff0000;
+  background-color: #ffe0e0;
+  border: 1px solid #ff0000;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
 }

@@ -154,3 +154,6 @@ CREATE TABLE Event_Tracking (
     FOREIGN KEY (UIN) REFERENCES Users(UIN)
 
 );
+
+
+ALTER TABLE `Document` DROP FOREIGN KEY `document_ibfk_1`; ALTER TABLE `Document` ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`App_Num`) REFERENCES `Applications`(`App_Num`) ON DELETE CASCADE ON UPDATE CASCADE;

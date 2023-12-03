@@ -3,6 +3,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+session_start();
+
+// Ensure the user is logged in and has a UIN set in the session
+if (!isset($_SESSION['UIN'])) {
+    die("User not logged in or UIN not set");
+}
+
+$uin = $_SESSION['UIN'];
+
 include_once '../database.php';
 
 $message = '';
@@ -10,22 +19,29 @@ $message = '';
 // File Upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['document'])) {
     if (isset($_POST['app_num']) && is_numeric($_POST['app_num']) && isset($_POST['doc_type'])) {
-        $filename = $_FILES['document']['name'];
-        $tempname = $_FILES['document']['tmp_name'];
-        $folder = "../uploads/" . $filename;
-
         $appNum = $_POST['app_num'];
-        $docType = $_POST['doc_type'];
+        // Check if the application number is linked to the user
+        $appCheckSql = "SELECT * FROM Applications WHERE App_Num = $appNum AND UIN = $uin";
+        $appCheckResult = mysqli_query($conn, $appCheckSql);
+        if (mysqli_num_rows($appCheckResult) > 0) {
+            // Application belongs to the user, proceed with upload
+            $filename = $_FILES['document']['name'];
+            $tempname = $_FILES['document']['tmp_name'];
+            $folder = "../uploads/" . $filename;
+            $docType = $_POST['doc_type'];
 
-        if (move_uploaded_file($tempname, $folder)) {
-            $sql = "INSERT INTO Document (App_Num, Link, Doc_Type) VALUES ($appNum, '$filename', '$docType')";
-            if (mysqli_query($conn, $sql)) {
-                $message = "File uploaded successfully";
+            if (move_uploaded_file($tempname, $folder)) {
+                $sql = "INSERT INTO Document (App_Num, Link, Doc_Type) VALUES ($appNum, '$filename', '$docType')";
+                if (mysqli_query($conn, $sql)) {
+                    $message = "File uploaded successfully";
+                } else {
+                    $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
+                }
             } else {
-                $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
+                $message = "Failed to upload file";
             }
         } else {
-            $message = "Failed to upload file";
+            $message = "Invalid application number or not authorized";
         }
     } else {
         $message = "Application number must be a number or document type not set";
@@ -45,8 +61,11 @@ if (isset($_GET['delete'])) {
     }
 }
 
-// Fetch Documents
-$sql = "SELECT * FROM Document";
+// Fetch Documents for a specific user
+$sql = "SELECT Document.* FROM Document 
+        INNER JOIN Applications ON Document.App_Num = Applications.App_Num 
+        WHERE Applications.UIN = $uin";
+
 $documents = mysqli_query($conn, $sql);
 ?>
 

@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 session_start();
 
 if (!isset($_SESSION['userLoggedIn'])) {
-    header('Location: login.php'); // Redirect to login page
+    header('Location: login.php');
     exit();
 }
 
