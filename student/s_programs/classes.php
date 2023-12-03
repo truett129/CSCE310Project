@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['class-id'], $_POST['cl
 
 }
 
-// Delete Program Progress
+// Delete Class Enrollment
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $ceNum = $_GET['delete'];
     $deleteSql = "DELETE FROM Class_Enrollment WHERE CE_NUM = '$ceNum'";
@@ -98,9 +98,9 @@ while ($row = mysqli_fetch_assoc($classResult)) {
     </header>
     <div class="container">
         <div class="content">
-            <!-- Insert or Update Program Progress Section -->
+            <!-- Insert or Update Class Enrollments -->
             <div class="new-program-form">
-                <h2>Record or Edit Program Progress</h2>
+                <h2>Record or Edit Class Enrollments</h2>
                 <form action="" method="POST">
                     <div class="input-label">
                         <label for="class-id">Class Name</label>
@@ -133,7 +133,7 @@ while ($row = mysqli_fetch_assoc($classResult)) {
                 <?php endif; ?>
             </div>
 
-            <!-- Display Program Progress -->
+            <!-- Display Class Enrollments -->
             <section>
                 <h2>Class Enrollments</h2>
                 <table>
