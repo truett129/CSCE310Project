@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     <td>" . $row['Program_Num'] . "</td>
                     <td>" . $row['Name'] . "</td>
                     <td>" . $row['Description'] . "</td>
-                    <td>" . ($row['is_active'] == 1 ? 'Active' : 'Inactive') . "</td>
+                    <td>" . ($row['Is_Active'] == 1 ? 'Active' : 'Inactive') . "</td>
                     <td><a href='program_report.php?Program_Num=" . $row['Program_Num'] . "'>Generate Report</a></td>
                     <td><a href='update_program.php?Program_Num=" . $row['Program_Num'] . "'>Update</a></td>
                     <td><a href='delete_program.php?Program_Num=" . $row['Program_Num'] . "'>Delete</a></td>

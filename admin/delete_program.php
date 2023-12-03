@@ -4,7 +4,7 @@
         if (isset($_POST['delete'])) {
             if ($_POST['delete'] === 'Set Inactive') {
                 // Soft delete: set is_active attribute to false
-                mysqli_query($conn, "UPDATE programs SET is_active = 0 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+                mysqli_query($conn, "UPDATE programs SET Is_Active = 0 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
                 $message = "Program marked as inactive";
             } elseif ($_POST['delete'] === 'Delete') {
                 // Hard delete: remove the program entirely
@@ -13,7 +13,7 @@
             }
             elseif ($_POST['delete'] === 'Set Active') {
                 // Soft delete: set is_active attribute to false
-                mysqli_query($conn, "UPDATE programs SET is_active = 1 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+                mysqli_query($conn, "UPDATE programs SET Is_Active = 1 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
                 $message = "Program marked as active";
             }
         }
@@ -55,7 +55,7 @@
                     <!-- Soft delete form -->
                     <form action="" method="POST">
                     <?php
-                        if ($row['is_active'] == 1) {
+                        if ($row['Is_Active'] == 1) {
                             echo '<input class="button" name="delete" type="submit" value="Set Inactive">';
                         } else {
                             echo '<input class="button" name="delete" type="submit" value="Set Active">';
