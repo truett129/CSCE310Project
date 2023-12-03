@@ -64,8 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                         <th>Program Number</th>
                         <th>Program Name</th>
                         <th>Program Description</th>
+                        <th>Status</th>
                         <th>Generate Report</th>
                         <th>Update</th>
+                        <th>Delete</th>
                     </tr>
                     <?php
                     if (mysqli_num_rows($result) > 0) {
@@ -74,8 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     <td>" . $row['Program_Num'] . "</td>
                     <td>" . $row['Name'] . "</td>
                     <td>" . $row['Description'] . "</td>
-                    <td><button class='generate-report' program-num='" . $row['Program_Num'] . "' program-name='" . $row['Name'] . "' program-description='" . $row['Description'] . "'>Generate Report</button></td>
+                    <td>" . ($row['is_active'] == 1 ? 'Active' : 'Inactive') . "</td>
+                    <td><a href='program_report.php?Program_Num=" . $row['Program_Num'] . "'>Generate Report</a></td>
                     <td><a href='update_program.php?Program_Num=" . $row['Program_Num'] . "'>Update</a></td>
+                    <td><a href='delete_program.php?Program_Num=" . $row['Program_Num'] . "'>Delete</a></td>
                     </tr>";
                         }
                     } else {
@@ -91,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
             <div id="report-container"></div>
         </div>
     </div>
-
+<!-- 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var generateReportButtons = document.querySelectorAll('.generate-report');
@@ -113,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     "<p><strong>Description:</strong> " + programDescription + "</p>";
             }
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

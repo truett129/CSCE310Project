@@ -1,11 +1,10 @@
 <?php
     include_once '../database.php';
     if(count($_POST)>0){
-        mysqli_query($conn, "UPDATE applications SET Uncom_Cert='" . $_POST['uncom_cert'] . "', Com_Cert='" . $_POST['com_cert'] . "', Purpose_Statement='" . $_POST['purpose_statement'] . "' WHERE Program_Num='" . $_GET['program_num'] . "' AND UIN='" . $_GET['uin'] . "'");
-        $message = "Record Modified Successfully";
+        mysqli_query($conn, "DELETE FROM applications WHERE Program_Num='" . $_GET['program_num'] . "' AND UIN='" . $_GET['uin'] . "'");
+        $message = "Record Deleted Successfully";
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +24,7 @@
     <div class="container">
         <div class="content">
             <div class="form-container">
-                <h2>Update Application</h2>
+                <h2>View Application</h2>
                 <div class="student-application-form">
                     <form action="" method="POST">
                         <div class="input-label">
@@ -34,7 +33,7 @@
                         </div>
                         <div class="input-label">
                         <label for="program-name">Program Name</label>
-                        <input type="text" name="program_name" id="program_name" value="<?php
+                        <input type="text" name="program-name" id="program-name" value="<?php
 
                             $programNum = mysqli_real_escape_string($conn, $_GET['program_num']);
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
@@ -65,26 +64,26 @@
                         ?>
                 
                         <div class="input-label">
-                            <label for="uncom_cert">Are you currently enrolled in
+                            <label for="uncom-cert">Are you currently enrolled in
                             other uncompleted certifications
                             sponsored by the Cybersecurity
                             Center? (Leave blank if no)</label>
-                            <input type="text" name="uncom_cert" id="uncom_cert" value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>" >
+                            <input type="text" name="uncom-cert" id="uncom-cert" value="<?php echo isset($row['Uncom_Cert']) ? $row['Uncom_Cert'] : ''; ?>" readonly>
                         </div>
                 
                         <div class="input-label">
-                            <label for="com_cert">Have you completed any
+                            <label for="com-cert">Have you completed any
                             cybersecurity industry
                             certifications via the
                             Cybersecurity Center? (Leave blank if no)</label>
-                            <input type="text" name="com_cert" id="com_cert" value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>" >
+                            <input type="text" name="com-cert" id="com-cert" value="<?php echo isset($row['Com_Cert']) ? $row['Com_Cert'] : ''; ?>" readonly>
                         </div>
                 
                         <div class="input-label">
-                            <label for="purpose_statement">Purpose Statement</label>
-                            <input type="text" name="purpose_statement" id="purpose_statement" value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>" >
+                            <label for="purpose-statement">Purpose Statement</label>
+                            <input type="text" name="purpose-statement" id="purpose-statement" value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>" readonly>
                         </div>
-                        <input class="button" type="submit" name='submit' value="Submit">
+                        <input class="button" type="submit" name="delete" value="Delete Application?">
                         <p><?php if(isset($message)) echo $message; ?></p>
                     </form>
                 </div>
