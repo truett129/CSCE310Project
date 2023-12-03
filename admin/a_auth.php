@@ -39,15 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mInitial = $_POST['m_initial'];
         $lastName = $_POST['last_name'];
         $username = $_POST['username'];
-        $password = $_POST['password']; // Consider hashing the password
+        $password = $_POST['password'];
         $userType = $_POST['user_type'];
         $email = $_POST['email'];
         $discordName = $_POST['discord_name'];
 
         if ($action == 'insert') {
+            // $password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO Users (UIN, First_Name, M_Initial, Last_Name, Username, Passwords, User_Type, Email, Discord_Name) VALUES ('$uin', '$firstName', '$mInitial', '$lastName', '$username', '$password', '$userType', '$email', '$discordName')";
         } else {
-            $sql = "UPDATE Users SET First_Name='$firstName', M_Initial='$mInitial', Last_Name='$lastName', Username='$username', Passwords='$password', User_Type='$userType', Email='$email', Discord_Name='$discordName' WHERE UIN='$uin'";
+            $sql = "UPDATE Users SET First_Name='$firstName', M_Initial='$mInitial', Last_Name='$lastName', Username='$username', User_Type='$userType', Email='$email', Discord_Name='$discordName' WHERE UIN='$uin'";
+            if (!empty($password)) {
+                // $password = password_hash($password, PASSWORD_DEFAULT);
+                $sql = "UPDATE Users SET First_Name='$firstName', M_Initial='$mInitial', Last_Name='$lastName', Username='$username', Passwords='$password', User_Type='$userType', Email='$email', Discord_Name='$discordName' WHERE UIN='$uin'";
+            }
         }
 
         if (mysqli_query($conn, $sql)) {
@@ -166,12 +171,16 @@ $users = mysqli_query($conn, $sql);
                             value="<?php echo $editingUser['Username'] ?? ''; ?>" required>
                     </div>
                     <div class="input-label">
-                        <input type="password" name="password" placeholder="Password" required>
+                        <input type="password" name="password" placeholder="Password" <?php echo $editingUser ? '' : 'required'; ?>>
                     </div>
                     <div class="input-label">
-                        <input type="text" name="user_type" placeholder="User Type"
-                            value="<?php echo $editingUser['User_Type'] ?? ''; ?>" required>
+                        <label for="user_type">User Type</label>
+                        <select name="user_type" id="user_type" required>
+                            <option value="admin" <?php echo (isset($editingUser) && $editingUser['User_Type'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
+                            <option value="student" <?php echo (isset($editingUser) && $editingUser['User_Type'] == 'student') ? 'selected' : ''; ?>>Student</option>
+                        </select>
                     </div>
+
                     <div class="input-label">
                         <input type="email" name="email" placeholder="Email"
                             value="<?php echo $editingUser['Email'] ?? ''; ?>" required>
