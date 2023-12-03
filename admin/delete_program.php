@@ -1,29 +1,35 @@
 <?php
-    include_once '../database.php';
-    if (count($_POST) > 0) {
-        if (isset($_POST['delete'])) {
-            if ($_POST['delete'] === 'Set Inactive') {
-                // Soft delete: set is_active attribute to false
-                mysqli_query($conn, "UPDATE programs SET Is_Active = 0 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-                $message = "Program marked as inactive";
-            } elseif ($_POST['delete'] === 'Delete') {
-                // Hard delete: remove the program entirely
-                mysqli_query($conn, "DELETE FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-                $message = "Program deleted successfully";
-            }
-            elseif ($_POST['delete'] === 'Set Active') {
-                // Soft delete: set is_active attribute to false
-                mysqli_query($conn, "UPDATE programs SET Is_Active = 1 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-                $message = "Program marked as active";
-            }
+session_start();
+
+// Ensure the user is logged in and is an admin
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
+    die("Access denied: User not logged in or not an admin.");
+}
+include_once '../database.php';
+if (count($_POST) > 0) {
+    if (isset($_POST['delete'])) {
+        if ($_POST['delete'] === 'Set Inactive') {
+            // Soft delete: set is_active attribute to false
+            mysqli_query($conn, "UPDATE programs SET is_active = 0 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+            $message = "Program marked as inactive";
+        } elseif ($_POST['delete'] === 'Delete') {
+            // Hard delete: remove the program entirely
+            mysqli_query($conn, "DELETE FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+            $message = "Program deleted successfully";
+        } elseif ($_POST['delete'] === 'Set Active') {
+            // Soft delete: set is_active attribute to false
+            mysqli_query($conn, "UPDATE programs SET is_active = 1 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+            $message = "Program marked as active";
         }
     }
-    $result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-    $row= mysqli_fetch_array($result);
+}
+$result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+$row = mysqli_fetch_array($result);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,6 +39,7 @@
     </style>
     <title>Update Program Information</title>
 </head>
+
 <body>
     <header>
         <h1>Admin Program Information</h1>
@@ -44,23 +51,25 @@
                 <h2>Update Program Information</h2>
                 <form action="" method="POST">
                     <label for="Program_Num">Program Number</label>
-                    <input type="text" name="Program_Num" id="Program_Num" value="<?php echo $row['Program_Num']; ?>" readonly>
+                    <input type="text" name="Program_Num" id="Program_Num" value="<?php echo $row['Program_Num']; ?>"
+                        readonly>
 
                     <label for="Name">Program Name</label>
                     <input type="text" name="Name" id="Name" value="<?php echo $row['Name']; ?>" readonlu>
 
                     <label for="Description">Program Description</label>
-                    <input type="text" name="Description" id="Description" value="<?php echo $row['Description']; ?>" readonly>
+                    <input type="text" name="Description" id="Description" value="<?php echo $row['Description']; ?>"
+                        readonly>
 
                     <!-- Soft delete form -->
                     <form action="" method="POST">
                     <?php
-                        if ($row['Is_Active'] == 1) {
+                        if ($row['is_active'] == 1) {
                             echo '<input class="button" name="delete" type="submit" value="Set Inactive">';
                         } else {
                             echo '<input class="button" name="delete" type="submit" value="Set Active">';
                         }
-                    ?>
+                        ?>
                     </form>
 
                     <!-- Hard delete form -->
@@ -68,9 +77,13 @@
                         <input class="button" name="delete" type="submit" value="Delete">
                     </form>
                 </form>
-                <p><?php if(isset($message)) echo $message; ?></p>
+                <p>
+                    <?php if (isset($message))
+                        echo $message; ?>
+                </p>
             </div>
         </div>
     </div>
 </body>
+
 </html>

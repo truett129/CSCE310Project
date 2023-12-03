@@ -1,13 +1,21 @@
 <?php
-    include_once '../database.php';
 
-    // basic program information
-    $result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-    $row= mysqli_fetch_array($result);
+session_start();
+
+// Ensure the user is logged in and is an admin
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
+    die("Access denied: User not logged in or not an admin.");
+}
+include_once '../database.php';
+
+// basic program information
+$result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
+$row = mysqli_fetch_array($result);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +25,7 @@
     </style>
     <title>Update Program Information</title>
 </head>
+
 <body>
     <header>
         <h1>Admin Program Information</h1>
@@ -27,14 +36,20 @@
             <div class="program-report">
                 <h2>Program Report</h2>
                 <h3>Program Info</h3>
-                <p>Program Number: <?php echo $row['Program_Num'] ?></p>
-                <p>Name: <?php echo $row['Name'] ?></p>
-                <p>Description: <?php echo $row['Description'] ?></p>
+                <p>Program Number:
+                    <?php echo $row['Program_Num'] ?>
+                </p>
+                <p>Name:
+                    <?php echo $row['Name'] ?>
+                </p>
+                <p>Description:
+                    <?php echo $row['Description'] ?>
+                </p>
                 <h3>Enrollment Information</h3>
                 <?php
-                    $programNumber = $_GET['Program_Num'];
+                $programNumber = $_GET['Program_Num'];
 
-                    $enrollmentQuery = "SELECT COUNT(*) AS total_students,
+                $enrollmentQuery = "SELECT COUNT(*) AS total_students,
                     SUM(CASE WHEN Gender = 'Male' THEN 1 ELSE 0 END) AS male_count,
                     SUM(CASE WHEN Gender = 'Female' THEN 1 ELSE 0 END) AS female_count,
                     SUM(CASE WHEN Hispanic_Latino = 1 THEN 1 ELSE 0 END) AS hispanic_latino_count,
@@ -43,17 +58,28 @@
                     INNER JOIN Track T ON CS.UIN = T.Student_Num
                     WHERE T.Program_Num = $programNumber";
 
-                    $result = mysqli_query($conn, $enrollmentQuery);
-                    $row= mysqli_fetch_array($result);
+                $result = mysqli_query($conn, $enrollmentQuery);
+                $row = mysqli_fetch_array($result);
 
                 ?>
-                <p>Total Students: <?php echo $row['total_students'] ?></p>
-                <p>Male Students: <?php echo $row['male_count'] ?></p>
-                <p>Female Students: <?php echo $row['female_count'] ?></p>
-                <p>Hispanic or Latino Students: <?php echo $row['hispanic_latino_count'] ?></p>
-                <p>First Generation Students: <?php echo $row['first_gen_count'] ?></p>
+                <p>Total Students:
+                    <?php echo $row['total_students'] ?>
+                </p>
+                <p>Male Students:
+                    <?php echo $row['male_count'] ?>
+                </p>
+                <p>Female Students:
+                    <?php echo $row['female_count'] ?>
+                </p>
+                <p>Hispanic or Latino Students:
+                    <?php echo $row['hispanic_latino_count'] ?>
+                </p>
+                <p>First Generation Students:
+                    <?php echo $row['first_gen_count'] ?>
+                </p>
             </div>
         </div>
     </div>
 </body>
+
 </html>

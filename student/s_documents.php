@@ -5,6 +5,11 @@ error_reporting(E_ALL);
 
 session_start();
 
+// Ensure the user is logged in and is an student
+if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
+    die("Access denied: User not logged in or not an student.");
+}
+
 // Ensure the user is logged in and has a UIN set in the session
 if (!isset($_SESSION['UIN'])) {
     die("User not logged in or UIN not set");
