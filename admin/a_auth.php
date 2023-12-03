@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $deleteType = $_POST['delete_type'];
 
         if ($deleteType == 'soft') {
-            // Soft delete: Set Is_Deleted to TRUE or set Deleted_At to current datetime
-            $sql = "UPDATE Users SET Is_Deleted = TRUE WHERE UIN = '$uin'";
+            // Soft delete: Set Is_Active to FALSE or set Deleted_At to current datetime
+            $sql = "UPDATE Users SET Is_Active = FALSE WHERE UIN = '$uin'";
             // For datetime: $sql = "UPDATE Users SET Deleted_At = NOW() WHERE UIN = '$uin'";
         } else {
             // Hard delete: Remove the user record from the database
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['soft_delete'])) {
         $uin = $_GET['soft_delete'];
-        $sql = "UPDATE Users SET Is_Deleted = TRUE WHERE UIN = '$uin'";
+        $sql = "UPDATE Users SET Is_Active = FALSE WHERE UIN = '$uin'";
         if (mysqli_query($conn, $sql)) {
             $message = "User soft-deleted successfully";
         } else {
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Reactivation should be a separate condition, not nested inside hard_delete
     if (isset($_GET['reactivate'])) {
         $uin = $_GET['reactivate'];
-        $sql = "UPDATE Users SET Is_Deleted = FALSE WHERE UIN = '$uin'";
+        $sql = "UPDATE Users SET Is_Active = TRUE WHERE UIN = '$uin'";
         if (mysqli_query($conn, $sql)) {
             $message = "User reactivated successfully";
         } else {
@@ -223,9 +223,9 @@ $users = mysqli_query($conn, $sql);
                     <?php
                     if (mysqli_num_rows($users) > 0) {
                         while ($row = mysqli_fetch_assoc($users)) {
-                            $softDeleteAction = !$row['Is_Deleted'] ? "<a href='?soft_delete=" . $row['UIN'] . "'>Soft Delete</a>" : "";
-                            $reactivateAction = $row['Is_Deleted'] ? "<a href='?reactivate=" . $row['UIN'] . "'>Reactivate</a>" : "";
-                            $hardDeleteAction = "<a href='?hard_delete=" . $row['UIN'] . "'>Hard Delete</a>";
+                            $softDeleteAction = $row['Is_Active'] ? "<a href='?soft_delete=" . $row['UIN'] . "'>Set Inactive</a>" : "";
+                            $reactivateAction = !$row['Is_Active'] ? "<a href='?reactivate=" . $row['UIN'] . "'>Set Active</a>" : "";
+                            $hardDeleteAction = "<a href='?hard_delete=" . $row['UIN'] . "'>Delete Permanently</a>";
 
                             echo "<tr>
             <td>" . $row['UIN'] . "</td>

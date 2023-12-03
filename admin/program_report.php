@@ -2,6 +2,8 @@
 
 session_start();
 
+$programNumber = $_GET['Program_Num'];
+
 // Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
@@ -47,7 +49,6 @@ $row = mysqli_fetch_array($result);
                 </p>
                 <h3>Enrollment Information</h3>
                 <?php
-                $programNumber = $_GET['Program_Num'];
 
                 $enrollmentQuery = "SELECT COUNT(*) AS total_students,
                     SUM(CASE WHEN Gender = 'Male' THEN 1 ELSE 0 END) AS male_count,
@@ -77,6 +78,40 @@ $row = mysqli_fetch_array($result);
                 <p>First Generation Students:
                     <?php echo $row['first_gen_count'] ?>
                 </p>
+                <h3>Academic Information</h3>
+                <?php
+                
+                $averageGPAQuery = "SELECT AVG(GPA) AS average_gpa
+                    FROM College_Student CS
+                    JOIN Track T ON CS.UIN = T.Student_Num
+                    WHERE T.Program_Num = $programNumber";
+
+                $result = mysqli_query($conn, $averageGPAQuery);
+                $row = mysqli_fetch_array($result);
+                ?>
+                <p>Average GPA: <?php echo number_format($row['average_gpa'], 2) ?></p>
+                <?php
+                $topMajorsQuery = "SELECT Major, COUNT(*) AS count_major
+                                    FROM College_Student CS
+                                    JOIN Track T ON CS.UIN = T.Student_Num
+                                    WHERE T.Program_Num = $programNumber
+                                    GROUP BY Major
+                                    ORDER BY count_major DESC
+                                    LIMIT 3";
+
+                $result = mysqli_query($conn, $topMajorsQuery);
+
+                if (mysqli_num_rows($result) > 0) {
+                    echo "<p>Top 3 Majors:</p>";
+                    echo "<ul>";
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<li>" . $row['Major'] . " (" . $row['count_major'] . " students)</li>";
+                    }
+                    echo "</ul>";
+                } else {
+                    echo "No data available";
+                }
+                ?>
             </div>
         </div>
     </div>

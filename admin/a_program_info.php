@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     </div>
                     <div class="input-label">
                         <label for="description">Program Description</label>
-                        <input type="text" name="description" id="description" required>
+                        <textarea type="text" name="description" id="description" required></textarea>
                     </div>
                     <input type="submit" name='submit' value="Submit" class="button">
                 </form>
@@ -99,34 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                 </table>
                 <button class="button"><a href="a_program_info.php">Refresh</a></button>
             </section>
-
-            <h2>Program Report</h2>
-            <div id="report-container"></div>
         </div>
     </div>
-    <!-- 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var generateReportButtons = document.querySelectorAll('.generate-report');
-
-            generateReportButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    var programNum = this.getAttribute('program-num');
-                    var programName = this.getAttribute('program-name');
-                    var programDescription = this.getAttribute('program-description');
-
-                    generateReport(programNum, programName, programDescription);
-                });
-            });
-
-            function generateReport(programNum, programName, programDescription) {
-                var reportContainer = document.getElementById('report-container');
-                reportContainer.innerHTML = "<h3>Report for Program " + programNum + "</h3>" +
-                    "<p><strong>Name:</strong> " + programName + "</p>" +
-                    "<p><strong>Description:</strong> " + programDescription + "</p>";
-            }
-        });
-    </script> -->
 </body>
 
 </html>
