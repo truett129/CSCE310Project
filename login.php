@@ -45,26 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header>
         <h1>Texas A&M Cybersecurity</h1>
-        <div class="header-links"><a href="register.php" class="button">Register</a></div>
     </header>
     <div class="form-container">
-        <form action="" method="POST">
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Username" required>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <div class="input-group">
-                <input type="submit" value="Login" class="button">
-            </div>
-            <div class="input-group">
-                <?php if ($message != ''): ?>
-                    <p class="error-message">
-                        <?php echo $message; ?>
-                    </p>
-                <?php endif; ?>
-            </div>
+        <h2 style = "text-align: center;" >Please Select User Type</h2>
+            <form action="login/login_student.php" style = "padding: 20px 0 20px 0; ">
+                <input type="submit" value="Student" class="button">
+            </form>
+            <form action="login/login_admin.php">
+                <input type="submit" value="Admin" class="button">
+            </form>
         </form>
     </div>
 </body>
