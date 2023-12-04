@@ -38,3 +38,8 @@ CSCE 310 TAMCC Project
 ## Abdullah
 - **Admin:** Event Management
 - **Student:** Document Upload and Management
+- **Setup**:
+  - **Admin:** Program Progress Tracking
+  - **Student:** Program Progress Tracking
+  - **Admin:** User Authentication and Roles
+  - **Student:** User Authentication and Roles
