@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once './database.php'; // Adjust the path as needed
+include_once '../database.php'; // Adjust the path as needed
 
 $message = '';
 
@@ -47,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Texas A&M Cybersecurity</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
     <header>
         <h1>Texas A&M Cybersecurity - Registration</h1>
-        <div class="header-links"><a href="index.php" class="button">Back to Login</a></div>
+        <div class="header-links"><a href="login_student.php" class="button">Back to Student Login</a></div>
     </header>
 
     <div class="form-container">
