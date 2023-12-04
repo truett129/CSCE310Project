@@ -100,7 +100,17 @@ $documents = mysqli_query($conn, $sql);
                         <input type="file" name="document" required>
                     </div>
                     <div class="input-label">
-                        <input type="text" name="app_num" placeholder="Application Number" required>
+                        <label for="app_num">Application Number</label>
+                        <select name="app_num" id="app_num" required>
+                            <?php
+                            $result = mysqli_query($conn, "SELECT applications.App_Num, programs.Name FROM applications JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.UIN = $uin");
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['App_Num'] . "'>" . $row['App_Num'] . " - " . $row['Name'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="input-label">
                         <input type="text" name="doc_type" placeholder="Document Type" required>

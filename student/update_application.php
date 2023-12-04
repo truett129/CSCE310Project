@@ -1,14 +1,22 @@
 <?php
 
+include_once '../database.php';
 session_start();
 
 // Ensure the user is logged in and is an student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
-include_once '../database.php';
+
+$result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+}
+$programNum = $row['Program_Num'];
+$uin = $row['UIN'];
+
 if (count($_POST) > 0) {
-    mysqli_query($conn, "UPDATE applications SET Uncom_Cert='" . $_POST['uncom_cert'] . "', Com_Cert='" . $_POST['com_cert'] . "', Purpose_Statement='" . $_POST['purpose_statement'] . "' WHERE Program_Num='" . $_GET['program_num'] . "' AND UIN='" . $_GET['uin'] . "'");
+    mysqli_query($conn, "UPDATE applications SET Uncom_Cert='" . $_POST['uncom_cert'] . "', Com_Cert='" . $_POST['com_cert'] . "', Purpose_Statement='" . $_POST['purpose_statement'] . "' WHERE Program_Num='$programNum' AND UIN='$uin'");
     $message = "Record Modified Successfully";
 }
 ?>
@@ -39,13 +47,12 @@ if (count($_POST) > 0) {
                     <form action="" method="POST">
                         <div class="input-label">
                             <label for="uin">UIN</label>
-                            <input type="text" name="uin" id="uin" value=<?php echo $_GET['uin'] ?> readonly>
+                            <input type="text" name="uin" id="uin" value=<?php echo $uin ?> readonly>
                         </div>
                         <div class="input-label">
                             <label for="program-name">Program Name</label>
                             <input type="text" name="program_name" id="program_name" value="<?php
 
-                            $programNum = mysqli_real_escape_string($conn, $_GET['program_num']);
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
                             $result = mysqli_query($conn, $query);
 
@@ -65,9 +72,7 @@ if (count($_POST) > 0) {
                             </select>
                         </div>
                         <?php
-                        $uin = $_GET['uin'];
-                        $programNum = $_GET['program_num'];
-                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE uin=$uin AND program_num=$programNum");
+                        $result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
                         if ($result) {
                             $row = mysqli_fetch_assoc($result);
                         }

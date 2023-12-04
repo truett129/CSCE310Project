@@ -2,16 +2,17 @@
 
 session_start();
 
+$uin = $_SESSION['UIN'];
+
 // Ensure the user is logged in and is an student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
 include_once '../database.php';
-$result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs");
+$result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs WHERE Is_Active = 1");
 
 // insert
-if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
-    $uin = $_POST['uin'];
+if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
     $program_num = $_POST['program-num'];
     $uncom_cert = $_POST['uncom-cert'];
     $com_cert = $_POST['com-cert'];
@@ -48,10 +49,6 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
             <div class="form-container">
                 <h2>New Application Form</h2>
                 <form action="" method="POST">
-                    <div class="input-label">
-                        <label for="uin">UIN</label>
-                        <input type="text" name="uin" id="uin" required>
-                    </div>
                     <div class="input-label">
                         <label for="program-num">Program Name</label>
                         <select name="program-num" id="program-num" required>
@@ -96,16 +93,15 @@ if (isset($_POST['uin']) && isset($_POST['program-num']) && isset($_POST['purpos
                         <th>Delete</th>
                     </tr>
                     <?php
-                    $userUIN = 230002124;  // Example UIN
-                    $result = mysqli_query($conn, "SELECT applications.*, programs.Name FROM applications INNER JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.uin = $userUIN");
+                    $result = mysqli_query($conn, "SELECT applications.*, programs.Name FROM applications INNER JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.uin = $uin");
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>
                             <td>" . $row['Name'] . "</td>
                             <td>N/A</td>
-                            <td><a href='update_application.php?program_num=" . $row['Program_Num'] . "&uin=" . $userUIN . "'>Update</a></td>
-                            <td><a href='select_application.php?program_num=" . $row['Program_Num'] . "&uin=" . $userUIN . "'>Select</a></td>
-                            <td><a href='delete_application.php?program_num=" . $row['Program_Num'] . "&uin=" . $userUIN . "'>Delete</a></td>
+                            <td><a href='update_application.php?app_num=" . $row['App_Num'] . "'>Update</a></td>
+                            <td><a href='select_application.php?app_num=" . $row['App_Num'] . "'>Select</a></td>
+                            <td><a href='delete_application.php?app_num=" . $row['App_Num'] . "'>Delete</a></td>
                             </tr>";
                         }
                     } else {

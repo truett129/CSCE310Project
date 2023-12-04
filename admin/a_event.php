@@ -4,6 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
+$uin = $_SESSION['UIN'];
 
 // Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
@@ -21,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
     // Validate input fields
     if ($action == 'insert' || $action == 'update') {
-        $uin = $_POST['uin'];
         $programNum = $_POST['program_num'];
         $startDate = $_POST['start_date'];
         $time = $_POST['time'];
@@ -87,21 +87,31 @@ $events = mysqli_query($conn, $sql);
                     <input type="hidden" name="action" value="insert">
                     <input type="hidden" name="event_id" value=""> <!-- Add event ID for update -->
                     <div class="input-label">
-                        <input type="text" name="uin" placeholder="UIN" required>
+                        <label for="program_num">Program Name</label>
+                        <select name="program_num" id="program_num" required>
+                            <?php
+                            $result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs WHERE Is_Active = 1");
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="input-label">
-                        <input type="text" name="program_num" placeholder="Program Number" required>
-                    </div>
-                    <div class="input-label">
+                        <label for="start_date">Start Date</label>
                         <input type="date" name="start_date" required>
                     </div>
                     <div class="input-label">
+                        <label for="time">Time</label>
                         <input type="time" name="time" required>
                     </div>
                     <div class="input-label">
                         <input type="text" name="location" placeholder="Location" required>
                     </div>
                     <div class="input-label">
+                        <label for="end_date">End Date</label>
                         <input type="date" name="end_date" required>
                     </div>
                     <div class="input-label">
