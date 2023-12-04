@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
 
-    $sql = "SELECT * FROM Users WHERE Username = '$username'";
+    $sql = "SELECT * FROM Users WHERE Username = '$username' AND User_Type = 'Admin'";
     $result = mysqli_query($conn, $sql);
     if ($result && mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['userLoggedIn'] = true;
             $_SESSION['UIN'] = $user['UIN'];
             $_SESSION['userRole'] = $user['User_Type'];
-            header('Location: index.php');
+            header('Location: ../index.php');
             exit();
         } else {
             $message = "Incorrect password";
@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header>
         <h1>Texas A&M Cybersecurity</h1>
+		<div class="header-links"><a href="../login.php" class="button">Select User Type</a></div>
     </header>
 
     <div class="form-container">

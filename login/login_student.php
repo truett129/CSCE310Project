@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
 
-    $sql = "SELECT * FROM Users WHERE Username = '$username'";
+    $sql = "SELECT * FROM Users WHERE Username = '$username' AND User_Type = 'Student'";
     $result = mysqli_query($conn, $sql);
     if ($result && mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['userLoggedIn'] = true;
             $_SESSION['UIN'] = $user['UIN'];
             $_SESSION['userRole'] = $user['User_Type'];
-            header('Location: index.php');
+            header('Location: ../index.php');
             exit();
         } else {
             $message = "Incorrect password";
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header>
         <h1>Texas A&M Cybersecurity</h1>
-        <div class="header-links"><a href="register.php" class="button">Register</a></div>
+        <div class="header-links"><a href="../login.php" class="button">Select User Type</a></div>
     </header>
     <div class="form-container">
 	<h2 style = "text-align: center; padding-bottom: 20px;">Student Login</h2>
@@ -59,14 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="input-group">
                 <input type="submit" value="Login" class="button">
             </div>
-            <div class="input-group">
-                <?php if ($message != ''): ?>
-                    <p class="error-message">
-                        <?php echo $message; ?>
-                    </p>
-                <?php endif; ?>
-            </div>
         </form>
+		<form action="register.php">
+			<input type="submit" value="Register" class="button">
+		</form>
+		<form action="" method="POST">
+			<?php if ($message != ''): ?>
+				<p class="error-message">
+					<?php echo $message; ?>
+				</p>
+			<?php endif; ?>
+		</form>
     </div>
 </body>
 
