@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $discord_name = mysqli_real_escape_string($conn, $_POST['discord_name']);
+    $user_type = "Student";
 
     // Check if the UIN already exists
     $checkUinSql = "SELECT UIN FROM Users WHERE UIN = '$uin'";
@@ -25,12 +26,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $message = "Error: UIN already in use.";
     } else {
         // SQL to insert new user, now including the UIN
-        $sql = "INSERT INTO Users (UIN, First_Name, M_Initial, Last_Name, Username, Passwords, Email, Discord_Name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO Users (UIN, First_Name, M_Initial, Last_Name, Username, Passwords, User_Type, Email, Discord_Name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "isssssss", $uin, $first_name, $m_initial, $last_name, $username, $password, $email, $discord_name);
+        mysqli_stmt_bind_param($stmt, "issssssss", $uin, $first_name, $m_initial, $last_name, $username, $password, $user_type, $email, $discord_name);
 
-        if (mysqli_stmt_execute($stmt)) {
+        //adding user into college student table
+        $sql2 = "INSERT INTO College_Student(UIN) VALUES (?)";
+
+        $stmt2 = mysqli_prepare($conn, $sql2);
+        mysqli_stmt_bind_param($stmt2, "i", $uin);
+
+        if (mysqli_stmt_execute($stmt) && mysqli_stmt_execute($stmt2)) {
             $message = "Registration successful!";
         } else {
             $message = "Error: " . mysqli_error($conn);
