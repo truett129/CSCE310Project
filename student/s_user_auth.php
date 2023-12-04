@@ -139,15 +139,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                         </select>
                     </label><br>
                     <label>Hispanic/Latino:
-                        <input type="checkbox" name="hispanic_latino" value="1" <?php echo $collegeStudentData['Hispanic_Latino'] ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="hispanic_latino" value="1" <?php echo !empty($collegeStudentData['Hispanic_Latino']) && $collegeStudentData['Hispanic_Latino'] ? 'checked' : ''; ?>>
                     </label><br>
                     <label>Race: <input type="text" name="race"
                             value="<?php echo isset($collegeStudentData['Race']) ? htmlspecialchars($collegeStudentData['Race']) : ''; ?>"></label><br>
                     <label>US Citizen:
-                        <input type="checkbox" name="us_citizen" value="1" <?php echo $collegeStudentData['US_Citizen'] ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="us_citizen" value="1" <?php echo !empty($collegeStudentData['US_Citizen']) && $collegeStudentData['US_Citizen'] ? 'checked' : ''; ?>>
                     </label><br>
                     <label>First Generation:
-                        <input type="checkbox" name="first_generation" value="1" <?php echo $collegeStudentData['First_Generation'] ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="first_generation" value="1" <?php echo !empty($collegeStudentData['First_Generation']) && $collegeStudentData['First_Generation'] ? 'checked' : ''; ?>>
                     </label><br>
                     <label>Date of Birth: <input type="date" name="dob"
                             value="<?php echo isset($collegeStudentData['DoB']) ? htmlspecialchars($collegeStudentData['DoB']) : ''; ?>"></label><br>
