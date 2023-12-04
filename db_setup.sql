@@ -8,7 +8,8 @@ CREATE TABLE Users (
     Passwords VARCHAR(255),
     User_Type VARCHAR(255) DEFAULT 'student',
     Email VARCHAR(255),
-    Discord_Name VARCHAR(255)
+    Discord_Name VARCHAR(255),
+    Is_Active BOOLEAN DEFAULT TRUE,
 );
 
 -- College Student Table
