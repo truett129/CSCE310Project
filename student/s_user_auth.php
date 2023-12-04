@@ -134,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                     <input type="hidden" name="update_college_student" value="1">
                     <label>Gender:
                         <select name="gender">
+                            <option value="Select" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === '' ? 'selected' : ''; ?>>Select</option>
                             <option value="Female" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
                             <option value="Male" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
                         </select>
