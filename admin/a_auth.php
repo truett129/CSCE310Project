@@ -202,6 +202,7 @@ $users = mysqli_query($conn, $sql);
                     <div class="input-label">
                         <label for="user_type">User Type</label>
                         <select name="user_type" id="user_type" required>
+                            <option value="Select" <?php echo (isset($editingUser) && $editingUser['User_Type'] == '') ? 'selected' : ''; ?>>Select</option>
                             <option value="admin" <?php echo (isset($editingUser) && $editingUser['User_Type'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
                             <option value="student" <?php echo (isset($editingUser) && $editingUser['User_Type'] == 'student') ? 'selected' : ''; ?>>Student</option>
                         </select>
