@@ -72,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     // Prepare statement for college student update
     if ($dob != NULL) {
         $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = ?, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
-        $stmt->bind_param("sisiisdsssissisi", $gender, $hispanic_latino, $race, $usCitizen, $firstGeneration, $dob, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+        $stmt->bind_param("sisiisdsssissisi", $gender, $hispanicLatino, $race, $usCitizen, $firstGeneration, $dob, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
 
     } else {
         $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = NULL, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
-        $stmt->bind_param("sisiidsssissisi", $gender, $hispanic_latino, $race, $usCitizen, $firstGeneration, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+        $stmt->bind_param("sisiidsssissisi", $gender, $hispanicLatino, $race, $usCitizen, $firstGeneration, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
       
     }
 
