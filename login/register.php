@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $discord_name = mysqli_real_escape_string($conn, $_POST['discord_name']);
-    $user_type = "Student";
+    $user_type = "student";
 
     // Check if the UIN already exists
     $checkUinSql = "SELECT UIN FROM Users WHERE UIN = '$uin'";
