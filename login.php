@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>Texas A&M Cybersecurity</h1>
     </header>
     <div class="form-container">
-        <h2 style = "text-align: center;" >Please Select User Type</h2>
+        <h2 style = "text-align: center;" >Please Select Login User</h2>
             <form action="login/login_student.php" style = "padding: 20px 0 20px 0; ">
                 <input type="submit" value="Student" class="button">
             </form>
