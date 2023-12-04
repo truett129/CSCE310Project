@@ -59,10 +59,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     $minor2 = $_POST['minor_2'];
     $school = $_POST['school'];
     $phone = $_POST['phone'];
+    $hispanicLatino = isset($_POST['hispanic_latino']) ? 1 : 0;
+    $usCitizen = isset($_POST['us_citizen']) ? 1 : 0;
+    $firstGeneration = isset($_POST['first_generation']) ? 1 : 0;
+    $gpa = $_POST['gpa'];
+    $dob = isset($_POST['dob']) ? $_POST['dob'] : NULL;
+    $expectedGraduation = $_POST['expected_graduation'];
+    $classification = $_POST['classification'];
+    $studentType = $_POST['student_type'];
+
 
     // Prepare statement for college student update
-    $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Race = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, School = ?, Phone = ? WHERE UIN = ?");
-    $stmt->bind_param("sssssssi", $gender, $race, $major, $minor1, $minor2, $school, $phone, $uin);
+    if ($dob != NULL) {
+        $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = ?, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
+        $stmt->bind_param("sisiisdsssissisi", $gender, $hispanic_latino, $race, $usCitizen, $firstGeneration, $dob, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+
+    } else {
+        $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = NULL, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
+        $stmt->bind_param("sisiidsssissisi", $gender, $hispanic_latino, $race, $usCitizen, $firstGeneration, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+      
+    }
 
     if ($stmt->execute()) {
         $message .= "College student information updated successfully.";
@@ -134,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                     <input type="hidden" name="update_college_student" value="1">
                     <label>Gender:
                         <select name="gender">
-                            <option value="Select" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === '' ? 'selected' : ''; ?>>Select</option>
+                            <option value="NULL" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'NULL' ? 'selected' : ''; ?>>Select</option>
                             <option value="Female" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
                             <option value="Male" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
                         </select>
