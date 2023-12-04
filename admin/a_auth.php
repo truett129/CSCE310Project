@@ -52,6 +52,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($password)) {
                 // $password = password_hash($password, PASSWORD_DEFAULT);
                 $sql = "UPDATE Users SET First_Name='$firstName', M_Initial='$mInitial', Last_Name='$lastName', Username='$username', Passwords='$password', User_Type='$userType', Email='$email', Discord_Name='$discordName' WHERE UIN='$uin'";
+                
+            }
+            if ($userType == 'admin') {
+                $sql2 = "DELETE FROM College_Student WHERE UIN = '$uin'";
+                try {
+                    mysqli_query($conn, $sql2);
+                } catch (Exception $e) {
+                    $error = "Database error: " . mysqli_error($conn);
+                }
+
+            } else {
+                $checkSql = "SELECT * FROM College_Student WHERE UIN = '$uin'";
+
+                $result = mysqli_query($conn, $checkSql);
+
+                if ($result->num_rows == 0) {
+                    // SIN does not exist, so insert the record
+                    // Prepare your insert query with the appropriate columns and values
+                    $sql2 = "INSERT INTO College_Student (UIN) VALUES ('$uin')";
+                    try {
+                        mysqli_query($conn, $sql2);
+                    } catch (Exception $e) {
+                        $error = "Database error: " . mysqli_error($conn);
+                    }
+                }
             }
         }
 
