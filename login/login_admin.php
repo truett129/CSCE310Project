@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-include_once './database.php';
+include_once '../database.php';
 
 $message = '';
 
@@ -39,21 +39,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <head>
     <title>Login Page</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
 </head>
 
 <body>
     <header>
         <h1>Texas A&M Cybersecurity</h1>
     </header>
+
     <div class="form-container">
-        <h2 style = "text-align: center;" >Please Select User Type</h2>
-            <form action="login/login_student.php" style = "padding: 20px 0 20px 0; ">
-                <input type="submit" value="Student" class="button">
-            </form>
-            <form action="login/login_admin.php">
-                <input type="submit" value="Admin" class="button">
-            </form>
+	<h2 style = "text-align: center; padding-bottom: 20px;" >Admin Login</h2>
+        <form action="" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <input type="submit" value="Login" class="button">
+            </div>
+            <div class="input-group">
+                <?php if ($message != ''): ?>
+                    <p class="error-message">
+                        <?php echo $message; ?>
+                    </p>
+                <?php endif; ?>
+            </div>
         </form>
     </div>
 </body>
