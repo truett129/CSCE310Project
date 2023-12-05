@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     $stmt->close();
 }
 
-// Fetch updated user information if profile was just updated
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
     //$userResult = mysqli_query($conn, $userSql);
     //$userData = mysqli_fetch_assoc($userResult);
@@ -120,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
 
     <div class="container">
         <div class="content">
-            <!-- Profile Update Form -->
             <section>
                 <h2>Profile Information</h2>
                 <form action="" method="POST">
@@ -140,13 +138,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                 </form>
             </section>
 
-            <!-- College Student Information Update Form -->
             <section>
                 <h2>College Student Information</h2>
                 <form action="" method="POST">
                     <input type="hidden" name="update_college_student" value="1">
 
-                    <!-- Add all fields as per the College_Student table -->
                     <input type="hidden" name="update_college_student" value="1">
                     <label>Gender:
                         <select name="gender">
