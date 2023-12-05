@@ -18,7 +18,7 @@ $uin = $_SESSION['UIN']; // Assuming UIN is stored in session upon login
 
 // Fetch the logged-in student's user and college student information
 //$userSql = "SELECT * FROM Users WHERE UIN = '$uin'";
-$collegeStudentSql = "SELECT * FROM User_CollegeStudent WHERE UIN = '$uin'";
+$collegeStudentSql = "SELECT * FROM user_collegestudent WHERE UIN = '$uin'";
 
 //$userResult = mysqli_query($conn, $userSql);
 $collegeStudentResult = mysqli_query($conn, $collegeStudentSql);
