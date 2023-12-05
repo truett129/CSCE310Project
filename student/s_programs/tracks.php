@@ -21,40 +21,6 @@ include_once '../../database.php';
 
 $message = '';
 
-// Insert or Update Program Progress
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['program_num'])) {
-    $programNum = $_POST['program_num'];
-    $trackingNum = isset($_POST['tracking_num']) ? $_POST['tracking_num'] : null;
-
-    if ($trackingNum) {
-        // Update existing progress
-        $updateSql = "UPDATE Track SET Program_Num = '$programNum' WHERE Tracking_Num = '$trackingNum' AND Student_Num = '$uin'";
-        if (mysqli_query($conn, $updateSql)) {
-            $message = "Progress updated successfully";
-        } else {
-            $message = "Error updating progress: " . mysqli_error($conn);
-        }
-    } else {
-        // Insert new progress
-        $insertSql = "INSERT INTO Track (Program_Num, Student_Num) VALUES ('$programNum', '$uin')";
-        if (mysqli_query($conn, $insertSql)) {
-            $message = "New progress record created successfully";
-        } else {
-            $message = "Error creating progress record: " . mysqli_error($conn);
-        }
-    }
-}
-
-// Delete Program Progress
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $trackingNum = $_GET['delete'];
-    $deleteSql = "DELETE FROM Track WHERE Tracking_Num = '$trackingNum' AND Student_Num = '$uin'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Progress deleted successfully";
-    } else {
-        $message = "Error deleting progress: " . mysqli_error($conn);
-    }
-}
 
 // Fetch Program Progress for the logged-in student
 $sql = "SELECT Track.*, Programs.Name FROM Track 
@@ -85,32 +51,6 @@ $programsResult = mysqli_query($conn, "SELECT Program_Num, Name FROM Programs");
     </header>
     <div class="container">
         <div class="content">
-            <!-- Insert or Update Program Progress Section -->
-            <div class="new-program-form">
-                <h2>Record or Edit Program Progress</h2>
-                <form action="" method="POST">
-                    <div class="input-label">
-                        <label for="program_num">Program Name</label>
-                        <select name="program_num" id="program_num" required>
-                            <?php
-                            while ($row = mysqli_fetch_assoc($programsResult)) {
-                                echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="input-label">
-                        <label for="tracking_num">Tracking Number (optional, for updates)</label>
-                        <input type="text" name="tracking_num" id="tracking_num">
-                    </div>
-                    <input type="submit" value="Submit" class="button">
-                </form>
-                <?php if (!empty($message)): ?>
-                    <div class="message">
-                        <?php echo $message; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
 
             <!-- Display Program Progress -->
             <section>
