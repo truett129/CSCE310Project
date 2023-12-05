@@ -17,17 +17,17 @@ $error = '';
 $uin = $_SESSION['UIN']; // Assuming UIN is stored in session upon login
 
 // Fetch the logged-in student's user and college student information
-$userSql = "SELECT * FROM Users WHERE UIN = '$uin'";
-$collegeStudentSql = "SELECT * FROM College_Student WHERE UIN = '$uin'";
+//$userSql = "SELECT * FROM Users WHERE UIN = '$uin'";
+$collegeStudentSql = "SELECT * FROM User_CollegeStudent WHERE UIN = '$uin'";
 
-$userResult = mysqli_query($conn, $userSql);
+//$userResult = mysqli_query($conn, $userSql);
 $collegeStudentResult = mysqli_query($conn, $collegeStudentSql);
 
-if (!$userResult || !$collegeStudentResult) {
+if (!$collegeStudentResult) {
     die("Error fetching user information.");
 }
 
-$userData = mysqli_fetch_assoc($userResult);
+//$userData = mysqli_fetch_assoc($userResult);
 $collegeStudentData = mysqli_fetch_assoc($collegeStudentResult);
 
 // Handle User Information Update
@@ -90,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
 
 // Fetch updated user information if profile was just updated
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
-    $userResult = mysqli_query($conn, $userSql);
-    $userData = mysqli_fetch_assoc($userResult);
+    //$userResult = mysqli_query($conn, $userSql);
+    //$userData = mysqli_fetch_assoc($userResult);
 
     $collegeStudentResult = mysqli_query($conn, $collegeStudentSql);
     $collegeStudentData = mysqli_fetch_assoc($collegeStudentResult);
@@ -126,15 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                 <form action="" method="POST">
                     <input type="hidden" name="update_profile" value="1">
                     <label>First Name: <input type="text" name="first_name"
-                            value="<?php echo isset($userData['First_Name']) ? htmlspecialchars($userData['First_Name']) : ''; ?>"></label><br>
+                            value="<?php echo isset($collegeStudentData['First_Name']) ? htmlspecialchars($collegeStudentData['First_Name']) : ''; ?>"></label><br>
                     <label>Middle Initial: <input type="text" name="m_initial"
-                            value="<?php echo htmlspecialchars($userData['M_Initial']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['M_Initial']); ?>"></label><br>
                     <label>Last Name: <input type="text" name="last_name"
-                            value="<?php echo htmlspecialchars($userData['Last_Name']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Last_Name']); ?>"></label><br>
                     <label>Email: <input type="email" name="email"
-                            value="<?php echo htmlspecialchars($userData['Email']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Email']); ?>"></label><br>
                     <label>Discord Name: <input type="text" name="discord_name"
-                            value="<?php echo htmlspecialchars($userData['Discord_Name']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Discord_Name']); ?>"></label><br>
                     <input type="submit" name="update_profile" value="Update Profile" class="button">
 
                 </form>
