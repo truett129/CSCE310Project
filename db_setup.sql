@@ -198,3 +198,7 @@ FROM
 JOIN
     College_Student cs ON u.UIN = cs.UIN;
 
+Intern_App
+
+CREATE INDEX Intern_App_UIN
+ON Intern_App(UIN);
