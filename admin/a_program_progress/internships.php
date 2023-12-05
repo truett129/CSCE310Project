@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_P
     $intDesc = $_POST['internship-description'];
     $intIsGov = $_POST['internship-is-gov'];
 
-    // Check if the Class exists
+    // Check if the Internship exists
     $checkIinSql = "SELECT * FROM Internship WHERE Name = '$intName'";
     $checkIinResult = mysqli_query($conn, $checkIinSql);
     if (mysqli_num_rows($checkIinResult) == 0) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_P
             $message = "Error creating internship: " . mysqli_error($conn);
         }
     } else {
-        // update class
+        // Internship class
         $updateSql = "UPDATE Internship SET Description = '$intDesc', Is_Gov=$intIsGov WHERE Name = '$intName'";
         if (mysqli_query($conn, $updateSql)) {
             $message = "Internship updated successfully";
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_P
     }
 }
 
-// Delete Class
+// Delete Internship
 if (isset($_GET['delete']) && $_GET['delete']) {
     $intID = $_GET['delete'];
     $deleteSql = "DELETE FROM Internship WHERE Intern_ID = '$intID'";
@@ -55,7 +55,7 @@ if (isset($_GET['delete']) && $_GET['delete']) {
     }
 }
 
-// Fetch all Classes
+// Fetch all Internships
 $internships = mysqli_query($conn, "SELECT * FROM Internship");
 ?>
 

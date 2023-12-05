@@ -61,9 +61,7 @@ if (isset($_GET['delete']) && $_GET['delete']) {
 }
 
 // Fetch Program Progress for all users
-$sql = "SELECT Track.*, Programs.Name, College_Student.UIN, Track.Tracking_Num FROM Track 
-        INNER JOIN Programs ON Track.Program_Num = Programs.Program_Num
-        INNER JOIN College_Student ON Track.Student_Num = College_Student.UIN";
+$sql = "SELECT * FROM Program_Progress";
 $progress = mysqli_query($conn, $sql);
 
 // Fetch all programs for the dropdown
