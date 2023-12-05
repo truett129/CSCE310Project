@@ -50,19 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
     $stmt->close();
 }
 
-// Handle College Student Information Update
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student'])) {
-    $gender = $_POST['gender'];
-    $race = $_POST['race'];
-    $major = $_POST['major'];
-    $minor1 = $_POST['minor_1'];
-    $minor2 = $_POST['minor_2'];
-    $school = $_POST['school'];
-    $phone = $_POST['phone'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
+    $firstName = $_POST['first_name'];
+    $mInitial = $_POST['m_initial'];
+    $lastName = $_POST['last_name'];
+    $email = $_POST['email'];
+    $discordName = $_POST['discord_name'];
 
-    // Prepare statement for college student update
-    $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Race = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, School = ?, Phone = ? WHERE UIN = ?");
-    $stmt->bind_param("sssssssi", $gender, $race, $major, $minor1, $minor2, $school, $phone, $uin);
+    $stmt = $conn->prepare("UPDATE Users SET First_Name = ?, M_Initial = ?, Last_Name = ?, Email = ?, Discord_Name = ? WHERE UIN = ?");
+    $stmt->bind_param("sssssi", $firstName, $mInitial, $lastName, $email, $discordName, $uin);
 
     if ($stmt->execute()) {
         $message .= "College student information updated successfully.";
@@ -72,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     $stmt->close();
 }
 
-// Fetch updated user information if profile was just updated
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
     $userResult = mysqli_query($conn, $userSql);
     $userData = mysqli_fetch_assoc($userResult);
@@ -104,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
 
     <div class="container">
         <div class="content">
-            <!-- Profile Update Form -->
             <section>
                 <h2>Profile Information</h2>
                 <form action="" method="POST">
@@ -124,13 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                 </form>
             </section>
 
-            <!-- College Student Information Update Form -->
             <section>
                 <h2>College Student Information</h2>
                 <form action="" method="POST">
                     <input type="hidden" name="update_college_student" value="1">
 
-                    <!-- Add all fields as per the College_Student table -->
                     <input type="hidden" name="update_college_student" value="1">
                     <label>Gender:
                         <select name="gender">
