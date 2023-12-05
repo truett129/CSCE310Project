@@ -156,3 +156,50 @@ CREATE TABLE Event_Tracking (
     FOREIGN KEY (UIN) REFERENCES Users(UIN) ON DELETE CASCADE
 );
 
+
+-- Create View for program progress for all users, used in admin tracks.php
+CREATE VIEW Program_Progress 
+AS 
+SELECT Track.*, Programs.Name, College_Student.UIN FROM Track 
+INNER JOIN Programs ON Track.Program_Num = Programs.Program_Num
+INNER JOIN College_Student ON Track.Student_Num = College_Student.UIN;
+
+-- Create Index to help when we filter by UIN for a specific student when displaying certificate enrollments
+CREATE INDEX Enrollment_UIN
+ON Cert_Enrollment(UIN);
+
+CREATE VIEW User_CollegeStudent AS
+SELECT
+    u.UIN,
+    u.First_Name,
+    u.M_Initial,
+    u.Last_Name,
+    u.Username,
+    u.Passwords,
+    u.User_Type,
+    u.Email,
+    u.Discord_Name,
+    cs.Gender,
+    cs.Hispanic_Latino,
+    cs.Race,
+    cs.US_Citizen,
+    cs.First_Generation,
+    cs.DoB,
+    cs.GPA,
+    cs.Major,
+    cs.Minor_1,
+    cs.Minor_2,
+    cs.Expected_Graduation,
+    cs.School,
+    cs.Classification,
+    cs.Phone,
+    cs.Student_Type
+FROM
+    Users u
+JOIN
+    College_Student cs ON u.UIN = cs.UIN;
+
+Intern_App
+
+CREATE INDEX Intern_App_UIN
+ON Intern_App(UIN);

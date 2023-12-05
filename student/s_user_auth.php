@@ -17,17 +17,17 @@ $error = '';
 $uin = $_SESSION['UIN']; // Assuming UIN is stored in session upon login
 
 // Fetch the logged-in student's user and college student information
-$userSql = "SELECT * FROM Users WHERE UIN = '$uin'";
-$collegeStudentSql = "SELECT * FROM College_Student WHERE UIN = '$uin'";
+//$userSql = "SELECT * FROM Users WHERE UIN = '$uin'";
+$collegeStudentSql = "SELECT * FROM user_collegestudent WHERE UIN = '$uin'";
 
-$userResult = mysqli_query($conn, $userSql);
+//$userResult = mysqli_query($conn, $userSql);
 $collegeStudentResult = mysqli_query($conn, $collegeStudentSql);
 
-if (!$userResult || !$collegeStudentResult) {
+if (!$collegeStudentResult) {
     die("Error fetching user information.");
 }
 
-$userData = mysqli_fetch_assoc($userResult);
+//$userData = mysqli_fetch_assoc($userResult);
 $collegeStudentData = mysqli_fetch_assoc($collegeStudentResult);
 
 // Handle User Information Update
@@ -50,15 +50,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
     $stmt->close();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
-    $firstName = $_POST['first_name'];
-    $mInitial = $_POST['m_initial'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
-    $discordName = $_POST['discord_name'];
+// Handle College Student Information Update
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student'])) {
+    $gender = $_POST['gender'];
+    $race = $_POST['race'];
+    $major = $_POST['major'];
+    $minor1 = $_POST['minor_1'];
+    $minor2 = $_POST['minor_2'];
+    $school = $_POST['school'];
+    $phone = $_POST['phone'];
+    $hispanicLatino = isset($_POST['hispanic_latino']) ? 1 : 0;
+    $usCitizen = isset($_POST['us_citizen']) ? 1 : 0;
+    $firstGeneration = isset($_POST['first_generation']) ? 1 : 0;
+    $gpa = $_POST['gpa'];
+    $dob = isset($_POST['dob']) ? $_POST['dob'] : NULL;
+    $expectedGraduation = $_POST['expected_graduation'];
+    $classification = $_POST['classification'];
+    $studentType = $_POST['student_type'];
 
-    $stmt = $conn->prepare("UPDATE Users SET First_Name = ?, M_Initial = ?, Last_Name = ?, Email = ?, Discord_Name = ? WHERE UIN = ?");
-    $stmt->bind_param("sssssi", $firstName, $mInitial, $lastName, $email, $discordName, $uin);
+
+    // Prepare statement for college student update
+    if ($dob != NULL) {
+        $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = ?, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
+        $stmt->bind_param("sisiisdsssissisi", $gender, $hispanicLatino, $race, $usCitizen, $firstGeneration, $dob, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+
+    } else {
+        $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = NULL, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
+        $stmt->bind_param("sisiidsssissisi", $gender, $hispanicLatino, $race, $usCitizen, $firstGeneration, $gpa, $major, $minor1, $minor2, $expectedGraduation, $school, $classification, $phone, $studentType, $uin);
+      
+    }
 
     if ($stmt->execute()) {
         $message .= "College student information updated successfully.";
@@ -69,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_user'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
-    $userResult = mysqli_query($conn, $userSql);
-    $userData = mysqli_fetch_assoc($userResult);
+    //$userResult = mysqli_query($conn, $userSql);
+    //$userData = mysqli_fetch_assoc($userResult);
 
     $collegeStudentResult = mysqli_query($conn, $collegeStudentSql);
     $collegeStudentData = mysqli_fetch_assoc($collegeStudentResult);
@@ -104,15 +124,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                 <form action="" method="POST">
                     <input type="hidden" name="update_profile" value="1">
                     <label>First Name: <input type="text" name="first_name"
-                            value="<?php echo isset($userData['First_Name']) ? htmlspecialchars($userData['First_Name']) : ''; ?>"></label><br>
+                            value="<?php echo isset($collegeStudentData['First_Name']) ? htmlspecialchars($collegeStudentData['First_Name']) : ''; ?>"></label><br>
                     <label>Middle Initial: <input type="text" name="m_initial"
-                            value="<?php echo htmlspecialchars($userData['M_Initial']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['M_Initial']); ?>"></label><br>
                     <label>Last Name: <input type="text" name="last_name"
-                            value="<?php echo htmlspecialchars($userData['Last_Name']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Last_Name']); ?>"></label><br>
                     <label>Email: <input type="email" name="email"
-                            value="<?php echo htmlspecialchars($userData['Email']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Email']); ?>"></label><br>
                     <label>Discord Name: <input type="text" name="discord_name"
-                            value="<?php echo htmlspecialchars($userData['Discord_Name']); ?>"></label><br>
+                            value="<?php echo htmlspecialchars($collegeStudentData['Discord_Name']); ?>"></label><br>
                     <input type="submit" name="update_profile" value="Update Profile" class="button">
 
                 </form>
@@ -126,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
                     <input type="hidden" name="update_college_student" value="1">
                     <label>Gender:
                         <select name="gender">
+                            <option value="NULL" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'NULL' ? 'selected' : ''; ?>>Select</option>
                             <option value="Female" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
                             <option value="Male" <?php echo isset($collegeStudentData['Gender']) && $collegeStudentData['Gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
                         </select>
