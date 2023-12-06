@@ -47,6 +47,7 @@ CREATE TABLE Internship (
     Name VARCHAR(255),
     Description VARCHAR(255),
     Is_Gov BOOLEAN
+    Location VARCHAR(50),
 );
 
 -- Programs Table
@@ -204,23 +205,22 @@ ON Intern_App(UIN);
 
 /* Student Reports Views */
 /*
-
 view 1
+Number of total [Progam] students
+Minority participation 
+The number of K-12 students enrolled in summer camps.
+Each program has summer camps. The students are applying to be a part of the summer camps.
+
+view 2
 Number of students to complete all course and certification opportunities.
 Number of students electing to take additional strategic foreign language courses.
 The number of students electing to take other cryptography and cryptographic mathematics courses.
 Number of students electing to carry additional data science and related courses.
 
-view 2
+view 3
 Number of students to enroll in DoD 8570.01M preparation training courses.
 Number of students to complete DoD 8570.01M preparation training courses.
 Number of students to complete a DoD 8570.01M certification examination.
-
-view 3
-Number of total [Progam] students
-Minority participation 
-The number of K-12 students enrolled in summer camps.
-Each program has summer camps. The students are applying to be a part of the summer camps.
 
 view 4
 Number of students pursuing federal internships
@@ -233,8 +233,8 @@ Student internship locations
 CREATE VIEW Program_Participation_Details AS
 SELECT P.Program_Num,
        COUNT(DISTINCT CS.UIN) AS Total_Students,
-       COUNT(CASE WHEN CS.Race <> 'White' THEN CS.UIN END) AS Minority_Participation,
-       COUNT(CASE WHEN CS.Student_Type = 'K-12' THEN CS.UIN END) AS K12_Students_Summer_Camps
+       COUNT(CASE WHEN CS.Race <> 'White' THEN CS.UIN END) AS Total_Minority,
+       COUNT(CASE WHEN CS.Student_Type = 'K-12' THEN CS.UIN END) AS K12_Students
 FROM Programs P
 LEFT JOIN Track T ON P.Program_Num = T.Program_Num
 LEFT JOIN College_Student CS ON T.Student_Num = CS.UIN
@@ -242,10 +242,10 @@ GROUP BY P.Program_Num;
 
 
 /* selects total students completed courses, total students in strategic language, total students in cryptography, total students in data science */
-CREATE VIEW Course_Certification_Participation_Details AS
+CREATE VIEW Course_Certification_Details AS
 SELECT P.Program_Num,
        COUNT(CASE WHEN CE.Status = 'Completed' THEN CS.UIN END) AS Students_Completed_All_Courses,
-       COUNT(CASE WHEN CE.Type = 'Strategic Foreign Language' THEN CS.UIN END) AS Students_Strategic_Language,
+       COUNT(CASE WHEN C.Type = 'Foreign Language' THEN CS.UIN END) AS Students_Foreign_Language,
        COUNT(CASE WHEN C.Name LIKE '%cryptography%' THEN CS.UIN END) AS Students_Cryptography,
        COUNT(CASE WHEN C.Description LIKE '%data science%' THEN CS.UIN END) AS Students_Data_Science
 FROM Programs P
@@ -255,6 +255,4 @@ LEFT JOIN Class_Enrollment CE ON CS.UIN = CE.UIN
 LEFT JOIN Classes C ON CE.Class_ID = C.Class_ID
 GROUP BY P.Program_Num;
 
-CREATE INDEX Track_Student_Num
-ON Track(Student_Num);
-
+CREATE INDEX Active_Program ON programs(Is_Active);
