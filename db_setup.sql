@@ -47,7 +47,7 @@ CREATE TABLE Internship (
     Name VARCHAR(255),
     Description VARCHAR(255),
     Is_Gov BOOLEAN,
-    Location VARCHAR(50),
+    Location VARCHAR(50)
 );
 
 -- Programs Table
