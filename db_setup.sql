@@ -46,7 +46,7 @@ CREATE TABLE Internship (
     Intern_ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Description VARCHAR(255),
-    Is_Gov BOOLEAN
+    Is_Gov BOOLEAN,
     Location VARCHAR(50),
 );
 
