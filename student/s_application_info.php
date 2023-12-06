@@ -4,7 +4,6 @@ session_start();
 
 $uin = $_SESSION['UIN'];
 
-// Ensure the user is logged in and is an student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
@@ -109,7 +108,6 @@ if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
                     }
                     ?>
                 </table>
-                <button class="button"><a href="s_application_info.php">Refresh</a></button>
             </section>
         </div>
     </div>

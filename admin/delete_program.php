@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
@@ -21,7 +20,13 @@ if (count($_POST) > 0) {
     }
 }
 $result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
-$row = mysqli_fetch_array($result);
+if($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_array($result);
+}
+else{
+    $row = ['Is_Active' => 0];
+    $message = "Program has been deleted";
+}
 ?>
 
 <!DOCTYPE html>
@@ -48,14 +53,14 @@ $row = mysqli_fetch_array($result);
                 <h2>Update Program Information</h2>
                 <form action="" method="POST">
                     <label for="Program_Num">Program Number</label>
-                    <input type="text" name="Program_Num" id="Program_Num" value="<?php echo $row['Program_Num']; ?>"
+                    <input type="text" name="Program_Num" id="Program_Num" value="<?php echo isset($row['Program_Num']) ? $row['Program_Num'] : ''; ?>"
                         readonly>
 
                     <label for="Name">Program Name</label>
-                    <input type="text" name="Name" id="Name" value="<?php echo $row['Name']; ?>" readonlu>
+                    <input type="text" name="Name" id="Name" value="<?php echo isset($row['Name']) ? $row['Name'] : ''; ?>" readonly>
 
                     <label for="Description">Program Description</label>
-                    <input type="text" name="Description" id="Description" value="<?php echo $row['Description']; ?>"
+                    <input type="text" name="Description" id="Description" value="<?php echo isset($row['Description']) ? $row['Description'] : ''; ?>"
                         readonly>
 
                     <!-- Soft delete form -->

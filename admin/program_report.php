@@ -4,7 +4,6 @@ session_start();
 
 $programNumber = $_GET['Program_Num'];
 
-// Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
@@ -50,67 +49,111 @@ $row = mysqli_fetch_array($result);
                 <h3>Enrollment Information</h3>
                 <?php
 
-                $enrollmentQuery = "SELECT COUNT(*) AS total_students,
-                    SUM(CASE WHEN Gender = 'Male' THEN 1 ELSE 0 END) AS male_count,
-                    SUM(CASE WHEN Gender = 'Female' THEN 1 ELSE 0 END) AS female_count,
-                    SUM(CASE WHEN Hispanic_Latino = 1 THEN 1 ELSE 0 END) AS hispanic_latino_count,
-                    SUM(CASE WHEN First_Generation = 1 THEN 1 ELSE 0 END) AS first_gen_count
-                    FROM College_Student CS
-                    INNER JOIN Track T ON CS.UIN = T.Student_Num
-                    WHERE T.Program_Num = $programNumber";
+                $programParticipation = "SELECT * FROM Program_Participation_Details WHERE Program_Num = $programNumber";
 
-                $result = mysqli_query($conn, $enrollmentQuery);
+                $result = mysqli_query($conn, $programParticipation);
                 $row = mysqli_fetch_array($result);
 
                 ?>
                 <p>Total Students:
-                    <?php echo $row['total_students'] ?>
+                    <?php echo $row['Total_Students'] ?>
                 </p>
-                <p>Male Students:
-                    <?php echo $row['male_count'] ?>
+                <p>Minority Students:
+                    <?php echo $row['Total_Minority'] ?>
                 </p>
-                <p>Female Students:
-                    <?php echo $row['female_count'] ?>
+                <p>K12 Students:
+                    <?php echo $row['K12_Students'] ?>
                 </p>
-                <p>Hispanic or Latino Students:
-                    <?php echo $row['hispanic_latino_count'] ?>
-                </p>
-                <p>First Generation Students:
-                    <?php echo $row['first_gen_count'] ?>
-                </p>
-                <h3>Academic Information</h3>
+                <h3>Student Course Information</h3>
                 <?php
-                
-                $averageGPAQuery = "SELECT AVG(GPA) AS average_gpa
-                    FROM College_Student CS
-                    JOIN Track T ON CS.UIN = T.Student_Num
-                    WHERE T.Program_Num = $programNumber";
 
-                $result = mysqli_query($conn, $averageGPAQuery);
+                $courseEnrollmentQuery = "SELECT * FROM Course_Certification_Details WHERE Program_Num = $programNumber";
+
+                $result = mysqli_query($conn, $courseEnrollmentQuery);
                 $row = mysqli_fetch_array($result);
                 ?>
-                <p>Average GPA: <?php echo number_format($row['average_gpa'], 2) ?></p>
+                <p>Students Completed All Courses:
+                    <?php echo $row['Students_Completed_All_Courses'] ?>
+                </p>
+                <p>Students in Foreign Language Courses:
+                    <?php echo $row['Students_Foreign_Language'] ?>
+                </p>
+                <p>Students in Cryptography:
+                    <?php echo $row['Students_Cryptography'] ?>
+                </p>
+                <p>Students in Data Science:
+                    <?php echo $row['Students_Data_Science'] ?>
+                </p>
+                <h3>Students in DoD 8570.01M</h3>
+                <?php 
+                $studentsEnrolled = "SELECT COUNT(DISTINCT CE.UIN) AS Enrolled_Students
+                FROM Class_Enrollment CE
+                JOIN Classes C ON CE.Class_ID = C.Class_ID
+                WHERE C.Name = 'DoD 8570.01M Preparation Course';
+                ";
+
+                $studentsCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS Completed_Students
+                FROM Class_Enrollment CE
+                JOIN Classes C ON CE.Class_ID = C.Class_ID
+                WHERE C.Name = 'DoD 8570.01M Preparation Course' AND CE.Status = 'Completed'";
+
+                $studentsCertified = "SELECT COUNT(DISTINCT CE.UIN) AS Certified_Students
+                FROM Cert_Enrollment CE
+                JOIN Certification C ON CE.Cert_ID = C.Cert_ID
+                WHERE C.Name = 'DoD 8570.01M Certification Examination' AND CE.Status = 'Completed'";
+
+                $result = mysqli_query($conn, $studentsEnrolled);
+                $row = mysqli_fetch_array($result);
+                echo "<p>Students Enrolled: " . $row['Enrolled_Students'] . "</p>";
+
+                $result = mysqli_query($conn, $studentsCompleted);
+                $row = mysqli_fetch_array($result);
+                echo "<p>Students Completed: " . $row['Completed_Students'] . "</p>";
+
+                $result = mysqli_query($conn, $studentsCertified);
+                $row = mysqli_fetch_array($result);
+                echo "<p>Students Certified: " . $row['Certified_Students'] . "</p>";
+                ?>
+                <h3>Student Internship Information</h3>
                 <?php
-                $topMajorsQuery = "SELECT Major, COUNT(*) AS count_major
-                                    FROM College_Student CS
-                                    JOIN Track T ON CS.UIN = T.Student_Num
-                                    WHERE T.Program_Num = $programNumber
-                                    GROUP BY Major
-                                    ORDER BY count_major DESC
-                                    LIMIT 3";
 
-                $result = mysqli_query($conn, $topMajorsQuery);
+                $studentsFedInternship = "SELECT COUNT(DISTINCT IA.UIN) AS Students_Pursuing_Internships
+                FROM Intern_App IA
+                JOIN Internship I ON IA.Intern_ID = I.Intern_ID
+                JOIN Track T ON IA.UIN = T.Student_Num
+                WHERE T.Program_Num = $programNumber AND I.Is_Gov = TRUE;
+                ";
 
-                if (mysqli_num_rows($result) > 0) {
-                    echo "<p>Top 3 Majors:</p>";
-                    echo "<ul>";
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<li>" . $row['Major'] . " (" . $row['count_major'] . " students)</li>";
-                    }
-                    echo "</ul>";
-                } else {
-                    echo "No data available";
+                $studentMajors = "SELECT DISTINCT CS.Major
+                FROM College_Student CS
+                JOIN Track T ON CS.UIN = T.Student_Num
+                WHERE T.Program_Num = $programNumber;
+                ";
+
+                $studentLocations = "SELECT DISTINCT I.Location
+                FROM Internship I
+                JOIN Intern_App IA ON I.Intern_ID = IA.Intern_ID
+                JOIN Track T ON IA.UIN = T.Student_Num
+                WHERE T.Program_Num = $programNumber";
+
+
+                $result = mysqli_query($conn, $studentsFedInternship);
+                $row = mysqli_fetch_array($result);
+                echo "<p>Students Pursuing Federal Internships: " . $row['Students_Pursuing_Internships'] . "</p>";
+
+                $result = mysqli_query($conn, $studentMajors);
+                echo "<p>Student Majors: ";
+                while ($row = mysqli_fetch_array($result)) {
+                    echo $row['Major'] . ", ";
                 }
+                echo "</p>";
+
+                $result = mysqli_query($conn, $studentLocations);
+                echo "<p>Student Locations: ";
+                while ($row = mysqli_fetch_array($result)) {
+                    echo $row['Location'] . ", ";
+                }
+                echo "</p>";
                 ?>
             </div>
         </div>
