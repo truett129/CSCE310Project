@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     $classification = $_POST['classification'];
     $studentType = $_POST['student_type'];
 
-
     // Prepare statement for college student update
     if ($dob != NULL) {
         $stmt = $conn->prepare("UPDATE College_Student SET Gender = ?, Hispanic_Latino = ?, Race = ?, US_Citizen = ?, First_Generation = ?, DoB = ?, GPA = ?, Major = ?, Minor_1 = ?, Minor_2 = ?, Expected_Graduation = ?, School = ?, Classification = ?, Phone = ?, Student_Type = ? WHERE UIN = ?");
@@ -87,6 +86,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_college_student
     }
     $stmt->close();
 }
+
+// if user wants to deactivate account
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deactivate'])) {
+
+    // Prepare statement for college student update
+    $stmt = $conn->prepare("DELETE FROM College_Student WHERE UIN = ?");
+    $stmt->bind_param("i", $uin);
+
+    $stmt->execute();
+    $stmt->close();
+
+    // Prepare statement for user update
+    $stmt = $conn->prepare("DELETE FROM Users WHERE UIN = ?");
+    $stmt->bind_param("i", $uin);
+
+    if ($stmt->execute()) {
+        $message .= "User Deleted Successfully. ";
+        header("Location: ../login.php");
+        exit;
+    } else {
+        $error .= "Error deleting user: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
     //$userResult = mysqli_query($conn, $userSql);
@@ -191,7 +216,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($message)) {
             <!-- Account Deactivation -->
             <section>
                 <h2>Account Settings</h2>
-                <a href="?deactivate" class="button">Deactivate Account</a>
+                <form action="" method="POST">
+                    <input type="hidden" name="deactivate" value="1">
+                    <input type="submit" value="Deactivate Account" class="button">
+                </form>
             </section>
         </div>
     </div>
