@@ -9,7 +9,7 @@ CREATE TABLE Users (
     User_Type VARCHAR(255) DEFAULT 'student',
     Email VARCHAR(255),
     Discord_Name VARCHAR(255),
-    Is_Active BOOLEAN DEFAULT TRUE,
+    Is_Active BOOLEAN DEFAULT TRUE
 );
 
 -- College Student Table
@@ -198,8 +198,6 @@ FROM
     Users u
 JOIN
     College_Student cs ON u.UIN = cs.UIN;
-
-Intern_App
-
+    
 CREATE INDEX Intern_App_UIN
 ON Intern_App(UIN);
