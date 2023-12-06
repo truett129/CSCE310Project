@@ -109,7 +109,7 @@ $certifications = mysqli_query($conn, "SELECT * FROM Certification");
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Type</th>
+                        <th>Level</th>
                         <th>Action</th>
                     </tr>
                     <?php
