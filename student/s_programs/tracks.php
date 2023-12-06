@@ -59,7 +59,6 @@ $programsResult = mysqli_query($conn, "SELECT Program_Num, Name FROM Programs");
                     <tr>
                         <th>Tracking Number</th>
                         <th>Program Name</th>
-                        <th>Action</th>
                     </tr>
                     <?php
                     if (mysqli_num_rows($progress) > 0) {
@@ -67,11 +66,10 @@ $programsResult = mysqli_query($conn, "SELECT Program_Num, Name FROM Programs");
                             echo "<tr>
                             <td>" . $row['Tracking_Num'] . "</td>
                             <td>" . $row['Name'] . "</td>
-                            <td><a href='?delete=" . $row['Tracking_Num'] . "'>Delete</a></td>
                             </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='3'>No progress records found</td></tr>";
+                        echo "<tr><td colspan='2'>No progress records found</td></tr>";
                     }
                     ?>
                 </table>
