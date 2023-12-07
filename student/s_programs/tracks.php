@@ -23,9 +23,8 @@ $message = '';
 
 
 // Fetch Program Progress for the logged-in student
-$sql = "SELECT Track.*, Programs.Name FROM Track 
-        INNER JOIN Programs ON Track.Program_Num = Programs.Program_Num
-        WHERE Track.Student_Num = $uin";
+$sql = "SELECT * FROM Program_Progress
+        WHERE UIN = $uin";
 
 $progress = mysqli_query($conn, $sql);
 

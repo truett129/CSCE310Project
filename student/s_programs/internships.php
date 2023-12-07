@@ -21,6 +21,18 @@ include_once '../../database.php';
 
 $message = '';
 
+
+// Delete Internship Application
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+    $IA_Num = $_GET['delete'];
+    $deleteSql = "DELETE FROM Intern_App WHERE IA_Num='$IA_Num'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Internship Application deleted successfully";
+    } else {
+        $message = "Error deleting Internship Application: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Intern Application
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['intern-id'], $_POST['intern-status'], $_POST['intern-year'])) {
     $internID = $_POST['intern-id'];
@@ -47,18 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['intern-id'], $_POST['i
         }
     }
 
-}
-
-
-// Delete Internship Application
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $IA_Num = $_GET['delete'];
-    $deleteSql = "DELETE FROM Intern_App WHERE IA_Num='$IA_Num'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Internship Application deleted successfully";
-    } else {
-        $message = "Error deleting Internship Application: " . mysqli_error($conn);
-    }
 }
 
 // Fetch enrollments

@@ -21,6 +21,18 @@ include_once '../../database.php';
 
 $message = '';
 
+
+// Delete Class Enrollment
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+    $ceNum = $_GET['delete'];
+    $deleteSql = "DELETE FROM Class_Enrollment WHERE CE_NUM = '$ceNum'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Enrollment deleted successfully";
+    } else {
+        $message = "Error deleting enrollment: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Class Enrollments
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['class-id'], $_POST['class-status'], $_POST['class-semester'], $_POST['class-year'])) {
     $classID = $_POST['class-id'];
@@ -49,17 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['class-id'], $_POST['cl
         }
     }
 
-}
-
-// Delete Class Enrollment
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $ceNum = $_GET['delete'];
-    $deleteSql = "DELETE FROM Class_Enrollment WHERE CE_NUM = '$ceNum'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Enrollment deleted successfully";
-    } else {
-        $message = "Error deleting enrollment: " . mysqli_error($conn);
-    }
 }
 
 // Fetch enrollments
