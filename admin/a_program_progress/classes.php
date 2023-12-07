@@ -15,6 +15,18 @@ include_once '../../database.php';
 $message = '';
 $uinExists = true;
 
+
+// Delete Class
+if (isset($_GET['delete']) && $_GET['delete']) {
+    $classID = $_GET['delete'];
+    $deleteSql = "DELETE FROM Classes WHERE Class_ID = '$classID'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Class deleted successfully";
+    } else {
+        $message = "Error deleting Class: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Classes
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['class-name'], $_POST['class-description'], $_POST['class-type'])) {
     $className = $_POST['class-name'];
@@ -41,17 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['class-name'], $_POST['
             $message = "Error updating Class: " . mysqli_error($conn);
         }
         
-    }
-}
-
-// Delete Class
-if (isset($_GET['delete']) && $_GET['delete']) {
-    $classID = $_GET['delete'];
-    $deleteSql = "DELETE FROM Classes WHERE Class_ID = '$classID'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Class deleted successfully";
-    } else {
-        $message = "Error deleting Class: " . mysqli_error($conn);
     }
 }
 

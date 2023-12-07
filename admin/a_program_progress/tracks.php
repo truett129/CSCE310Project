@@ -15,6 +15,17 @@ include_once '../../database.php';
 $message = '';
 $uinExists = true;
 
+// Delete Program Progress
+if (isset($_GET['delete']) && $_GET['delete']) {
+    $trackingNum = $_GET['delete'];
+    $deleteSql = "DELETE FROM Track WHERE Tracking_Num = '$trackingNum'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Progress deleted successfully";
+    } else {
+        $message = "Error deleting progress: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Program Progress
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['program-num'], $_POST['student-num'])) {
     $programNum = $_POST['program-num'];
@@ -46,17 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['program-num'], $_POST[
                 $message = "Error creating progress record: " . mysqli_error($conn);
             }
         }
-    }
-}
-
-// Delete Program Progress
-if (isset($_GET['delete']) && $_GET['delete']) {
-    $trackingNum = $_GET['delete'];
-    $deleteSql = "DELETE FROM Track WHERE Tracking_Num = '$trackingNum'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Progress deleted successfully";
-    } else {
-        $message = "Error deleting progress: " . mysqli_error($conn);
     }
 }
 
