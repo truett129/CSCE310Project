@@ -204,32 +204,8 @@ CREATE INDEX Intern_App_UIN
 ON Intern_App(UIN);
 
 /* Student Reports Views */
-/*
-view 1
-Number of total [Progam] students
-Minority participation 
-The number of K-12 students enrolled in summer camps.
-Each program has summer camps. The students are applying to be a part of the summer camps.
 
-view 2
-Number of students to complete all course and certification opportunities.
-Number of students electing to take additional strategic foreign language courses.
-The number of students electing to take other cryptography and cryptographic mathematics courses.
-Number of students electing to carry additional data science and related courses.
-
-view 3
-Number of students to enroll in DoD 8570.01M preparation training courses.
-Number of students to complete DoD 8570.01M preparation training courses.
-Number of students to complete a DoD 8570.01M certification examination.
-
-view 4
-Number of students pursuing federal internships
-The tracking system tracks what internships students have applied to, which ones they were accepted to, which ones they did not get accepted to, and which ones they took. This is supposed to be tracked yearly.
-Student majors 
-Student internship locations
-*/
-
-/* selects total students in the program, minority students, and k12 summer camp students */
+/* selects total students in the program, minority students, and k12 students */
 CREATE VIEW Program_Participation_Details AS
 SELECT P.Program_Num,
        COUNT(DISTINCT CS.UIN) AS Total_Students,
