@@ -82,7 +82,7 @@ $documents = mysqli_query($conn, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Management</title>
-    <link rel="stylesheet" href="../css/styles.css" /> <!-- Ensure correct path to style.css -->
+    <link rel="stylesheet" href="../css/styles.css" />
 </head>
 
 <body>
@@ -103,7 +103,7 @@ $documents = mysqli_query($conn, $sql);
                         <label for="app_num">Application Number</label>
                         <select name="app_num" id="app_num" required>
                             <?php
-                            $result = mysqli_query($conn, "SELECT applications.App_Num, programs.Name FROM applications JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.UIN = $uin");
+                            $result = mysqli_query($conn, "SELECT App_Num, Name FROM ApplicationsProgramsView WHERE UIN = $uin");
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<option value='" . $row['App_Num'] . "'>" . $row['App_Num'] . " - " . $row['Name'] . "</option>";

@@ -201,3 +201,15 @@ JOIN
     
 CREATE INDEX Intern_App_UIN
 ON Intern_App(UIN);
+
+
+-- Create View for program application for all applications, used in admin s_document.php
+CREATE VIEW ApplicationsProgramsView AS
+SELECT
+    applications.App_Num,
+    applications.UIN
+    programs.Name
+FROM
+    applications
+JOIN
+    programs ON applications.Program_Num = programs.Program_Num;
