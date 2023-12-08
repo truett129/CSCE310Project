@@ -21,6 +21,17 @@ include_once '../../database.php';
 
 $message = '';
 
+// Delete Cert Enrollment
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+    $CertE_Num = $_GET['delete'];
+    $deleteSql = "DELETE FROM Cert_Enrollment WHERE CertE_Num = '$CertE_Num'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Enrollment deleted successfully";
+    } else {
+        $message = "Error deleting enrollment: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Certification Enrollments
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && 
     isset($_POST['cert-id'], $_POST['cert-status'], $_POST['cert-semester'], $_POST['cert-year'], 
@@ -55,17 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
         }
     }
 
-}
-
-// Delete Cert Enrollment
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $CertE_Num = $_GET['delete'];
-    $deleteSql = "DELETE FROM Cert_Enrollment WHERE CertE_Num = '$CertE_Num'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Enrollment deleted successfully";
-    } else {
-        $message = "Error deleting enrollment: " . mysqli_error($conn);
-    }
 }
 
 // Fetch enrollments

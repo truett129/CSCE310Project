@@ -15,7 +15,18 @@ include_once '../../database.php';
 $message = '';
 $uinExists = true;
 
-// Insert or Update Certificationes
+// Delete certification
+if (isset($_GET['delete']) && $_GET['delete']) {
+    $certificationID = $_GET['delete'];
+    $deleteSql = "DELETE FROM Certification WHERE Cert_ID = '$certificationID'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Certification deleted successfully";
+    } else {
+        $message = "Error deleting Certification: " . mysqli_error($conn);
+    }
+}
+
+// Insert or Update Certifications
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['certification-name'], $_POST['certification-description'], $_POST['certification-level'])) {
     $certificationName = $_POST['certification-name'];
     $certificationDesc = $_POST['certification-description'];
@@ -41,17 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['certification-name'], 
             $message = "Error updating Certification: " . mysqli_error($conn);
         }
         
-    }
-}
-
-// Delete certification
-if (isset($_GET['delete']) && $_GET['delete']) {
-    $certificationID = $_GET['delete'];
-    $deleteSql = "DELETE FROM Certification WHERE Cert_ID = '$certificationID'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Certification deleted successfully";
-    } else {
-        $message = "Error deleting Certification: " . mysqli_error($conn);
     }
 }
 

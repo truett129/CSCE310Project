@@ -15,6 +15,17 @@ include_once '../../database.php';
 $message = '';
 $uinExists = true;
 
+// Delete Internship
+if (isset($_GET['delete']) && $_GET['delete']) {
+    $intID = $_GET['delete'];
+    $deleteSql = "DELETE FROM Internship WHERE Intern_ID = '$intID'";
+    if (mysqli_query($conn, $deleteSql)) {
+        $message = "Internship deleted successfully";
+    } else {
+        $message = "Error deleting Internship: " . mysqli_error($conn);
+    }
+}
+
 // Insert or Update Internships
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_POST['internship-description'], $_POST['internship-is-gov'])) {
     $intName = $_POST['internship-name'];
@@ -41,17 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_P
             $message = "Error updating Internship: " . mysqli_error($conn);
         }
         
-    }
-}
-
-// Delete Internship
-if (isset($_GET['delete']) && $_GET['delete']) {
-    $intID = $_GET['delete'];
-    $deleteSql = "DELETE FROM Internship WHERE Intern_ID = '$intID'";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Internship deleted successfully";
-    } else {
-        $message = "Error deleting Internship: " . mysqli_error($conn);
     }
 }
 
