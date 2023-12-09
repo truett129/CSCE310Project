@@ -67,14 +67,35 @@ $row = mysqli_fetch_array($result);
                 <h3>Student Course Information</h3>
                 <?php
 
+                function $allCourses($status){
+                    $allCoursesCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS Num_Students_Completed_All_Courses
+                    FROM Class_Enrollment CE
+                    INNER JOIN Classes C ON CE.Class_ID = C.Class_ID
+                    WHERE CE.Status = $status 
+                        AND CE.UIN IN (
+                            SELECT CS.UIN
+                            FROM College_Student CS
+                            INNER JOIN Track T ON CS.UIN = T.Student_Num
+                            WHERE T.Program_Num = $programNum
+                        )";
+                
+                    $result = mysqli_query($conn, $allCoursesCompleted);
+                
+                    $row = mysqli_fetch_array($result);
+                }
+
+                
+                ?>
+                <p>Students Completed All Courses:
+                    <?php echo $row['All_Courses_Completed'] ?>
+                </p>
+                <?php
+
                 $courseEnrollmentQuery = "SELECT * FROM Course_Certification_Details WHERE Program_Num = $programNumber";
 
                 $result = mysqli_query($conn, $courseEnrollmentQuery);
                 $row = mysqli_fetch_array($result);
                 ?>
-                <p>Students Completed All Courses:
-                    <?php echo $row['Students_Completed_All_Courses'] ?>
-                </p>
                 <p>Students in Foreign Language Courses:
                     <?php echo $row['Students_Foreign_Language'] ?>
                 </p>
