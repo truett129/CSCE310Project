@@ -18,6 +18,16 @@ https://youtu.be/sI1g-WeyaJs
 - Upload the db_setup.sql file and press "Import" at the bottom
 - You should see a bunch of success messages and see that all of the databases have been created
 
+# When Testing From Scratch...
+- Only admins can add new admins so an admin needs to be manually populated in the database
+- Go to the xampp control panel and go to the sql admin page
+- Read the "Setting up the SQL Database section" and make sure you follow that exactly (database name especially)
+- Navigate to the users table on the left side
+- Click insert at the top
+- Insert user credentials and when you get to "User_Type" replace "student" with "admin"
+- Press the "Go" button
+- You should be able to log in with admin credentials now
+
 # Roles on the Project
 
 ## Anthony
