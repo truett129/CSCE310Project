@@ -203,11 +203,11 @@ CREATE INDEX Intern_App_UIN
 ON Intern_App(UIN);
 
 
--- Create View for program application for all applications, used in admin s_document.php
+-- Create View for program application for all applications, used in student s_document.php
 CREATE VIEW ApplicationsProgramsView AS
 SELECT
     applications.App_Num,
-    applications.UIN
+    applications.UIN,
     programs.Name
 FROM
     applications
