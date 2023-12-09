@@ -221,7 +221,7 @@ GROUP BY P.Program_Num;
 CREATE VIEW Course_Certification_Details AS
 SELECT P.Program_Num,
        COUNT(CASE WHEN C.Type = 'Foreign Language' THEN CS.UIN END) AS Students_Foreign_Language,
-       COUNT(CASE WHEN C.Name LIKE '%cryptography%' THEN CS.UIN END) AS Students_Cryptography,
+       COUNT(CASE WHEN C.Description LIKE '%cryptography%' THEN CS.UIN END) AS Students_Cryptography,
        COUNT(CASE WHEN C.Description LIKE '%data science%' THEN CS.UIN END) AS Students_Data_Science
 FROM Programs P
 LEFT JOIN Track T ON P.Program_Num = T.Program_Num
