@@ -86,7 +86,6 @@ if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
                 <table>
                     <tr>
                         <th>Program Name</th>
-                        <th>Status</th>
                         <th>Update</th>
                         <th>Select</th>
                         <th>Delete</th>
@@ -97,7 +96,6 @@ if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>
                             <td>" . $row['Name'] . "</td>
-                            <td>N/A</td>
                             <td><a href='update_application.php?app_num=" . $row['App_Num'] . "'>Update</a></td>
                             <td><a href='select_application.php?app_num=" . $row['App_Num'] . "'>Select</a></td>
                             <td><a href='delete_application.php?app_num=" . $row['App_Num'] . "'>Delete</a></td>

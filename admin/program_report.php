@@ -89,7 +89,7 @@ $row = mysqli_fetch_array($result);
                 $studentsEnrolled = "SELECT COUNT(DISTINCT CE.UIN) AS Enrolled_Students
                 FROM Class_Enrollment CE
                 JOIN Classes C ON CE.Class_ID = C.Class_ID
-                WHERE C.Name = 'DoD 8570.01M Preparation Course';
+                WHERE C.Name = 'DoD 8570.01M Preparation Course' AND CE.Status = 'In-Progress';
                 ";
 
                 $studentsCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS Completed_Students
