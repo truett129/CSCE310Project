@@ -74,7 +74,7 @@ $classes = mysqli_query($conn, "SELECT * FROM Classes");
 <body>
     <header>
         <h1>Class Tracking</h1>
-        <div class="header-links"><a href="../../index.php" class="button">Back to Home</a></div>
+        <div class="header-links"><a href="../a_program_progress.php" class="button">Back to admin program portal</a></div>
     </header>
     <div class="container">
         <div class="content">
@@ -92,7 +92,11 @@ $classes = mysqli_query($conn, "SELECT * FROM Classes");
                     </div>
                     <div class="input-label">
                         <label for="class-type">Class Type</label>
-                        <input type="text" name="class-type" id="class-type">
+                        <select name="class-type" id="class-type" required>
+                            <option value='Beginner'>Beginner</option>
+                            <option value='Intermediate'>Intermediate</option>
+                            <option value='Advanced'>Advanced</option>
+                        </select>
                     </div>
                     <input type="submit" value="Submit" class="button">
                 </form>

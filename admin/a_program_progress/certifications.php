@@ -73,7 +73,7 @@ $certifications = mysqli_query($conn, "SELECT * FROM Certification");
 <body>
     <header>
         <h1>Certification Tracking</h1>
-        <div class="header-links"><a href="../../index.php" certification="button">Back to Home</a></div>
+        <div class="header-links"><a href="../a_program_progress.php" class="button">Back to admin program portal</a></div>
     </header>
     <div class="container">
         <div class="content">
@@ -91,7 +91,11 @@ $certifications = mysqli_query($conn, "SELECT * FROM Certification");
                     </div>
                     <div class="input-label">
                         <label for="certification-level">Certification Level</label>
-                        <input type="text" name="certification-level" id="certification-level">
+                        <select name="certification-level" id="certification-level" required>
+                            <option value='Beginner'>In-Progress</option>
+                            <option value='Intermediate'>Intermediate</option>
+                            <option value='Advanced'>Advanced</option>
+                        </select>
                     </div>
                     <input type="submit" value="Submit" class="button">
                 </form>
