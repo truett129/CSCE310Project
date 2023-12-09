@@ -67,37 +67,20 @@ $row = mysqli_fetch_array($result);
                 <h3>Student Course Information</h3>
                 <?php
 
-                $allCoursesCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS Num_Students_Completed_All_Courses
+                $allCoursesCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS All_Courses_Completed
                 FROM Class_Enrollment CE
                 INNER JOIN Classes C ON CE.Class_ID = C.Class_ID
-                WHERE CE.Status != 'COMPLETED'
-                    AND CE.UIN IN (
-                        SELECT CS.UIN
-                        FROM College_Student CS
-                        INNER JOIN Track T ON CS.UIN = T.Student_Num
-                        WHERE T.Program_Num = $programNum
-                    )";
+                WHERE CE.Status = 'Completed' 
+                      AND CE.UIN IN (
+                          SELECT CS.UIN
+                          FROM College_Student CS
+                          INNER JOIN Track T ON CS.UIN = T.Student_Num
+                          WHERE T.Program_Num = $programNumber
+                      )";
             
                 $result = mysqli_query($conn, $allCoursesCompleted);
             
                 $row = mysqli_fetch_array($result);
-
-                $allCoursesCompleted2 = "SELECT COUNT(DISTINCT CE.UIN) AS Num_Students_Completed_All_Courses
-                FROM Class_Enrollment CE
-                INNER JOIN Classes C ON CE.Class_ID = C.Class_ID
-                    WHERE CE.UIN IN (
-                        SELECT CS.UIN
-                        FROM College_Student CS
-                        INNER JOIN Track T ON CS.UIN = T.Student_Num
-                        WHERE T.Program_Num = $programNum
-                    )";
-
-                $result = mysqli_query($conn, $allCoursesCompleted2);
-                $r2 = mysqli_fetch_array($result);
-
-                $count = $r2['All_Courses_Completed'] - $row['All_Courses_Completed']
-                
-
                 
                 ?>
                 <p>Students Completed All Courses:
