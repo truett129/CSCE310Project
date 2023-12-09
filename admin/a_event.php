@@ -7,7 +7,7 @@ session_start();
 $uin = $_SESSION['UIN'];
 
 // Ensure the user is logged in and is an admin
-if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
+if(!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
 
@@ -16,12 +16,25 @@ include_once '../database.php'; // Adjust the path as needed
 $message = '';
 $error = '';
 
+
+// Handle Event Deletion
+if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
+    $eventID = $_GET['delete'];
+
+    $deleteSql = "DELETE FROM Event WHERE Event_ID=$eventID";
+    if(mysqli_query($conn, $deleteSql)) {
+        $message = "Event deleted successfully";
+    } else {
+        $error = "Database error: ".mysqli_error($conn);
+    }
+}
+
 // Handle Event Insertion, Update, and Deletion
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
 
     // Validate input fields
-    if ($action == 'insert' || $action == 'update') {
+    if($action == 'insert' || $action == 'update') {
         $programNum = $_POST['program_num'];
         $startDate = $_POST['start_date'];
         $time = $_POST['time'];
@@ -29,30 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
         $endDate = $_POST['end_date'];
         $eventType = $_POST['event_type'];
 
-        if ($action == 'insert') {
+        if($action == 'insert') {
             $sql = "INSERT INTO Event (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type) VALUES ('$uin', '$programNum', '$startDate', '$time', '$location', '$endDate', '$eventType')";
         } else {
             $eventID = $_POST['event_id'];
             $sql = "UPDATE Event SET UIN='$uin', Program_Num='$programNum', Start_Date='$startDate', Time='$time', Location='$location', End_Date='$endDate', Event_Type='$eventType' WHERE Event_ID=$eventID";
         }
 
-        if (mysqli_query($conn, $sql)) {
-            $message = "Event " . ($action == 'insert' ? "created" : "updated") . " successfully";
+        if(mysqli_query($conn, $sql)) {
+            $message = "Event ".($action == 'insert' ? "created" : "updated")." successfully";
         } else {
-            $error = "Database error: " . mysqli_error($conn);
+            $error = "Database error: ".mysqli_error($conn);
         }
-    }
-}
-
-// Handle Event Deletion
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
-    $eventID = $_GET['delete'];
-
-    $deleteSql = "DELETE FROM Event WHERE Event_ID=$eventID";
-    if (mysqli_query($conn, $deleteSql)) {
-        $message = "Event deleted successfully";
-    } else {
-        $error = "Database error: " . mysqli_error($conn);
     }
 }
 
@@ -69,7 +70,7 @@ $events = mysqli_query($conn, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Management</title>
-    <link rel="stylesheet" href="../css/styles.css" /> <!-- Ensure correct path to style.css -->
+    <link rel="stylesheet" href="../css/styles.css" />
 </head>
 
 <body>
@@ -91,9 +92,9 @@ $events = mysqli_query($conn, $sql);
                         <select name="program_num" id="program_num" required>
                             <?php
                             $result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs WHERE Is_Active = 1");
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['Program_Num'] . "'>" . $row['Name'] . "</option>";
+                            if(mysqli_num_rows($result) > 0) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='".$row['Program_Num']."'>".$row['Name']."</option>";
                                 }
                             }
                             ?>
@@ -119,7 +120,7 @@ $events = mysqli_query($conn, $sql);
                     </div>
                     <input type="submit" value="Submit Event" class="button">
                 </form>
-                <?php if (!empty($message)): ?>
+                <?php if(!empty($message)): ?>
                     <div class="message">
                         <?php echo $message; ?>
                     </div>
@@ -142,18 +143,21 @@ $events = mysqli_query($conn, $sql);
                         <th>Action</th>
                     </tr>
                     <?php
-                    if (mysqli_num_rows($events) > 0) {
-                        while ($row = mysqli_fetch_assoc($events)) {
+                    if(mysqli_num_rows($events) > 0) {
+                        while($row = mysqli_fetch_assoc($events)) {
                             echo "<tr>
-                                <td>" . $row['Event_ID'] . "</td>
-                                <td>" . $row['UIN'] . "</td>
-                                <td>" . $row['Program_Num'] . "</td>
-                                <td>" . $row['Start_Date'] . "</td>
-                                <td>" . $row['Time'] . "</td>
-                                <td>" . $row['Location'] . "</td>
-                                <td>" . $row['End_Date'] . "</td>
-                                <td>" . $row['Event_Type'] . "</td>
-                                <td><a href='?delete=" . $row['Event_ID'] . "'>Delete</a></td>
+                                <td>".$row['Event_ID']."</td>
+                                <td>".$row['UIN']."</td>
+                                <td>".$row['Program_Num']."</td>
+                                <td>".$row['Start_Date']."</td>
+                                <td>".$row['Time']."</td>
+                                <td>".$row['Location']."</td>
+                                <td>".$row['End_Date']."</td>
+                                <td>".$row['Event_Type']."</td>
+                                <td>
+                        <a href='?delete=".$row['Event_ID']."'>Delete</a> |
+                        <a href='update_event.php?event_id=".$row['Event_ID']."'>Update</a>
+                    </td>
                                 </tr>";
                         }
                     } else {

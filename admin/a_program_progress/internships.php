@@ -73,7 +73,7 @@ $internships = mysqli_query($conn, "SELECT * FROM Internship");
 <body>
     <header>
         <h1>Internship Tracking</h1>
-        <div class="header-links"><a href="../../index.php" class="button">Back to Home</a></div>
+        <div class="header-links"><a href="../a_program_progress.php" class="button">Back to admin program portal</a></div>
     </header>
     <div class="container">
         <div class="content">
