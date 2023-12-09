@@ -1,4 +1,13 @@
 <?php
+/**
+* This is the admin page for updating programs. Users can:
+*   Update existing programs
+*   
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 session_start();
 

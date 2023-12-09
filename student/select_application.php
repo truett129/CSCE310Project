@@ -1,4 +1,13 @@
 <?php
+/**
+* This is the user page for viewing program applications. Users can
+*   View all of the contents of their existing applications
+*
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 session_start();
 
