@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     </div>
                     <input type="submit" name='submit' value="Submit" class="button">
                 </form>
+                <!-- gives user feedback after they submit -->
                 <?php if (!empty($message)): ?>
                     <div class="message">
                         <?php echo $message; ?>
@@ -86,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                         <th>Update</th>
                         <th>Delete</th>
                     </tr>
+                    <!-- populates reports table from all reports in the database -->
                     <?php
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {

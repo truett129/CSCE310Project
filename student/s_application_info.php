@@ -17,6 +17,8 @@ if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }
 include_once '../database.php';
+
+// want to select active programs and ignore inactive ones
 $result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs WHERE Is_Active = 1");
 
 // insert
@@ -60,6 +62,7 @@ if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
                     <div class="input-label">
                         <label for="program-num">Program Name</label>
                         <select name="program-num" id="program-num" required>
+                            <!-- populates the dropdown menu when selecting different programs -->
                             <?php
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -99,6 +102,7 @@ if (isset($_POST['program-num']) && isset($_POST['purpose-statement'])) {
                         <th>Select</th>
                         <th>Delete</th>
                     </tr>
+                    <!-- populates the table with all of the applications that the student has submitted -->
                     <?php
                     $result = mysqli_query($conn, "SELECT applications.*, programs.Name FROM applications INNER JOIN programs ON applications.Program_Num = programs.Program_Num WHERE applications.uin = $uin");
                     if (mysqli_num_rows($result) > 0) {
