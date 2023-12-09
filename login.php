@@ -1,10 +1,18 @@
 <?php
+
+/**
+This page is the login page for the website. It allows the user to login as a student or admin.
+*
+@author  Truett Lee
+...
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 include_once './database.php';
-
+// CREATED BY: TRUETT LEE
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

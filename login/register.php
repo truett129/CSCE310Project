@@ -1,4 +1,12 @@
 <?php
+
+/**
+This page is used to register a new student user. 
+*
+@author  Truett Lee
+...
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -6,7 +14,7 @@ error_reporting(E_ALL);
 include_once '../database.php'; // Adjust the path as needed
 
 $message = '';
-
+// CREATED BY: TRUETT LEE
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Extract and sanitize input
     $uin = mysqli_real_escape_string($conn, $_POST['uin']);
