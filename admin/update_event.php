@@ -41,21 +41,27 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = $_POST['UIN'];
-    $user_exists = mysqli_query($conn, "SELECT * FROM Event_Tracking WHERE UIN='$user'");
-
-    if (mysqli_num_rows($user_exists) == 0) {
-        $insert = "INSERT INTO Event_Tracking (Event_ID, UIN) VALUES('$event_id', '$user')";
-        if(mysqli_query($conn, $insert)) {
-            $message = "User added successfully";
-        } else {
-            $error = "Database error: ".mysqli_error($conn);
-        }
-
-        $sql = "SELECT * FROM Event_Tracking WHERE Event_ID='$event_id'";
-        $events = mysqli_query($conn, $sql);
+    
+    if (!isset($_POST['action'])) {
+        die("Invalid action!");
     }
+    $act = $_POST['action'];
+    if ($act == 'attendance') {
+        $user = $_POST['UIN'];
+        $user_exists = mysqli_query($conn, "SELECT * FROM Event_Tracking WHERE UIN='$user'");
 
+        if (mysqli_num_rows($user_exists) == 0) {
+            $insert = "INSERT INTO Event_Tracking (Event_ID, UIN) VALUES('$event_id', '$user')";
+            if(mysqli_query($conn, $insert)) {
+                $message = "User added successfully";
+            } else {
+                $error = "Database error: ".mysqli_error($conn);
+            }
+
+            $sql = "SELECT * FROM Event_Tracking WHERE Event_ID='$event_id'";
+            $events = mysqli_query($conn, $sql);
+        }
+    }
 }
 
 ?>
@@ -81,9 +87,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="container">
         <div class="content">
+
             <div class="new-program-form">
                 <h2>Update Event Attendance</h2>
                 <form action="" method="POST">
+                    <input type="hidden" name="action" value="attendance">
                     <div class="input-label">
                         <label for="UIN">User</label>
                         <select name="UIN" id="UIN" required>

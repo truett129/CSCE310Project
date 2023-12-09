@@ -30,31 +30,32 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
 }
 
 // Handle Event Insertion, Update, and Deletion
-if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
-    $action = $_POST['action'];
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Validate input fields
-    if($action == 'insert' || $action == 'update') {
-        $programNum = $_POST['program_num'];
-        $startDate = $_POST['start_date'];
-        $time = $_POST['time'];
-        $location = $_POST['location'];
-        $endDate = $_POST['end_date'];
-        $eventType = $_POST['event_type'];
+    $programNum = $_POST['program_num'];
+    $startDate = $_POST['start_date'];
+    $time = $_POST['time'];
+    $location = $_POST['location'];
+    $endDate = $_POST['end_date'];
+    $eventType = $_POST['event_type'];
 
-        if($action == 'insert') {
-            $sql = "INSERT INTO Event (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type) VALUES ('$uin', '$programNum', '$startDate', '$time', '$location', '$endDate', '$eventType')";
-        } else {
-            $eventID = $_POST['event_id'];
-            $sql = "UPDATE Event SET UIN='$uin', Program_Num='$programNum', Start_Date='$startDate', Time='$time', Location='$location', End_Date='$endDate', Event_Type='$eventType' WHERE Event_ID=$eventID";
-        }
-
-        if(mysqli_query($conn, $sql)) {
-            $message = "Event ".($action == 'insert' ? "created" : "updated")." successfully";
-        } else {
-            $error = "Database error: ".mysqli_error($conn);
-        }
+    if(!$_POST['eid']) {
+        $sql = "INSERT INTO Event (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type) VALUES ('$uin', '$programNum', '$startDate', '$time', '$location', '$endDate', '$eventType')";
+        $action = 'insert';
+    } else {
+        $action='updated';
+        $val = $_POST['eid'];
+        $sql = "UPDATE Event SET UIN='$uin', Program_Num='$programNum', Start_Date='$startDate', Time='$time', Location='$location', End_Date='$endDate', Event_Type='$eventType'
+        WHERE Event_ID=$val";
     }
+
+    if(mysqli_query($conn, $sql)) {
+        $message = "Event ".($action == 'insert' ? "created" : "updated")." successfully";
+    } else {
+        $error = "Database error: ".mysqli_error($conn);
+    }
+    
 }
 
 // Fetch Events for Display
@@ -86,7 +87,6 @@ $events = mysqli_query($conn, $sql);
                 <h2>Create/Update Event</h2>
                 <form action="" method="POST">
                     <input type="hidden" name="action" value="insert">
-                    <input type="hidden" name="event_id" value=""> <!-- Add event ID for update -->
                     <div class="input-label">
                         <label for="program_num">Program Name</label>
                         <select name="program_num" id="program_num" required>
@@ -117,6 +117,10 @@ $events = mysqli_query($conn, $sql);
                     </div>
                     <div class="input-label">
                         <input type="text" name="event_type" placeholder="Event Type" required>
+                    </div>
+                    <div class="input-label">
+                        <label for="eid">Event ID for Updates</label>
+                        <input type="text" name="eid" id="eid" optional>
                     </div>
                     <input type="submit" value="Submit Event" class="button">
                 </form>
@@ -156,7 +160,7 @@ $events = mysqli_query($conn, $sql);
                                 <td>".$row['Event_Type']."</td>
                                 <td>
                         <a href='?delete=".$row['Event_ID']."'>Delete</a> |
-                        <a href='update_event.php?event_id=".$row['Event_ID']."'>Update</a>
+                        <a href='update_event.php?event_id=".$row['Event_ID']."'>Attendance</a>
                     </td>
                                 </tr>";
                         }
