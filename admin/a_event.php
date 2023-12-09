@@ -16,6 +16,19 @@ include_once '../database.php'; // Adjust the path as needed
 $message = '';
 $error = '';
 
+
+// Handle Event Deletion
+if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
+    $eventID = $_GET['delete'];
+
+    $deleteSql = "DELETE FROM Event WHERE Event_ID=$eventID";
+    if(mysqli_query($conn, $deleteSql)) {
+        $message = "Event deleted successfully";
+    } else {
+        $error = "Database error: ".mysqli_error($conn);
+    }
+}
+
 // Handle Event Insertion, Update, and Deletion
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
@@ -41,18 +54,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
         } else {
             $error = "Database error: ".mysqli_error($conn);
         }
-    }
-}
-
-// Handle Event Deletion
-if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
-    $eventID = $_GET['delete'];
-
-    $deleteSql = "DELETE FROM Event WHERE Event_ID=$eventID";
-    if(mysqli_query($conn, $deleteSql)) {
-        $message = "Event deleted successfully";
-    } else {
-        $error = "Database error: ".mysqli_error($conn);
     }
 }
 
