@@ -106,7 +106,7 @@ while ($row = mysqli_fetch_assoc($programs)) {
 <body>
     <header>
         <h1>Program Progress Tracking</h1>
-        <div class="header-links"><a href="../../index.php" class="button">Back to Home</a></div>
+        <div class="header-links"><a href="../s_programs.php" class="button">Back to student programs</a></div>
     </header>
     <div class="container">
         <div class="content">
@@ -126,7 +126,11 @@ while ($row = mysqli_fetch_assoc($programs)) {
                     </div>
                     <div class="input-label">
                         <label for="cert-status">Certification Status</label>
-                        <input type="text" name="cert-status" id="cert-status">
+                        <select name="cert-status" id="cert-status" required>
+                            <option value='In-Progress'>In-Progress</option>
+                            <option value='Completed'>Completed</option>
+                            <option value='Dropped'>Dropped</option>
+                        </select>
                     </div>
                     <div class="input-label">
                         <label for="cert-semester">Certification Semester</label>
