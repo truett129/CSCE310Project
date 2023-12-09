@@ -46,7 +46,8 @@ CREATE TABLE Internship (
     Intern_ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255),
     Description VARCHAR(255),
-    Is_Gov BOOLEAN
+    Is_Gov BOOLEAN,
+    Location VARCHAR(50)
 );
 
 -- Programs Table
@@ -202,7 +203,37 @@ JOIN
 CREATE INDEX Intern_App_UIN
 ON Intern_App(UIN);
 
+/* Student Reports Views */
 
+<<<<<<< HEAD
+/* selects total students in the program, minority students, and k12 students */
+CREATE VIEW Program_Participation_Details AS
+SELECT P.Program_Num,
+       COUNT(DISTINCT CS.UIN) AS Total_Students,
+       COUNT(CASE WHEN CS.Race <> 'White' THEN CS.UIN END) AS Total_Minority,
+       COUNT(CASE WHEN CS.Student_Type = 'K-12' THEN CS.UIN END) AS K12_Students
+FROM Programs P
+LEFT JOIN Track T ON P.Program_Num = T.Program_Num
+LEFT JOIN College_Student CS ON T.Student_Num = CS.UIN
+GROUP BY P.Program_Num;
+
+
+/* selects total students completed courses, total students in strategic language, total students in cryptography, total students in data science */
+CREATE VIEW Course_Certification_Details AS
+SELECT P.Program_Num,
+       COUNT(CASE WHEN CE.Status = 'Completed' THEN CS.UIN END) AS Students_Completed_All_Courses,
+       COUNT(CASE WHEN C.Type = 'Foreign Language' THEN CS.UIN END) AS Students_Foreign_Language,
+       COUNT(CASE WHEN C.Name LIKE '%cryptography%' THEN CS.UIN END) AS Students_Cryptography,
+       COUNT(CASE WHEN C.Description LIKE '%data science%' THEN CS.UIN END) AS Students_Data_Science
+FROM Programs P
+LEFT JOIN Track T ON P.Program_Num = T.Program_Num
+LEFT JOIN College_Student CS ON T.Student_Num = CS.UIN
+LEFT JOIN Class_Enrollment CE ON CS.UIN = CE.UIN
+LEFT JOIN Classes C ON CE.Class_ID = C.Class_ID
+GROUP BY P.Program_Num;
+
+CREATE INDEX Active_Program ON programs(Is_Active);
+=======
 -- Create View for program application for all applications, used in student s_document.php
 CREATE VIEW ApplicationsProgramsView AS
 SELECT
@@ -217,3 +248,4 @@ JOIN
 -- Creates an index on the Applications table to improve query efficiency involving 'App_Num' and 'UIN'.
 CREATE INDEX UIN_APPNUM
 ON Applications(App_Num, UIN);
+>>>>>>> main

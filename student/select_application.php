@@ -2,7 +2,6 @@
 
 session_start();
 
-// Ensure the user is logged in and is an student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not an student.");
 }

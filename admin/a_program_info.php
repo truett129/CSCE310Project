@@ -2,7 +2,6 @@
 
 session_start();
 
-// Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
@@ -13,13 +12,13 @@ $result = mysqli_query($conn, "SELECT * FROM programs");
 
 // insert
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    $conn = mysqli_connect('localhost', 'root', '', 'csce310db') or die('Connection failed: ' . mysqli_connect_error());
     if (isset($_POST['name']) && isset($_POST['description'])) {
         $name = $_POST['name'];
         $description = $_POST['description'];
         $sql = "INSERT INTO `programs` (`name`, `description`) VALUES ('$name', '$description')";
         if (mysqli_query($conn, $sql)) {
             $message = "New record created successfully";
+            $result = mysqli_query($conn, "SELECT * FROM programs");
         } else {
             $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -97,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     ?>
                 </table>
                 </table>
-                <button class="button"><a href="a_program_info.php">Refresh</a></button>
             </section>
         </div>
     </div>

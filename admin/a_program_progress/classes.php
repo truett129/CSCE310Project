@@ -93,9 +93,9 @@ $classes = mysqli_query($conn, "SELECT * FROM Classes");
                     <div class="input-label">
                         <label for="class-type">Class Type</label>
                         <select name="class-type" id="class-type" required>
-                            <option value='Beginner'>Beginner</option>
-                            <option value='Intermediate'>Intermediate</option>
-                            <option value='Advanced'>Advanced</option>
+                            <option value='Foreign Language'>Foreign Language</option>
+                            <option value='Computer Science'>Computer Science</option>
+                            <option value='Math'>Math</option>
                         </select>
                     </div>
                     <input type="submit" value="Submit" class="button">

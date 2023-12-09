@@ -27,17 +27,17 @@ if (isset($_GET['delete']) && $_GET['delete']) {
 }
 
 // Insert or Update Internships
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_POST['internship-description'], $_POST['internship-is-gov'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_POST['internship-description'], $_POST['internship-is-gov'], $_POST['internship-location'])) {
     $intName = $_POST['internship-name'];
     $intDesc = $_POST['internship-description'];
     $intIsGov = $_POST['internship-is-gov'];
-
+    $intLocation = $_POST['internship-location'];
     // Check if the Internship exists
     $checkIinSql = "SELECT * FROM Internship WHERE Name = '$intName'";
     $checkIinResult = mysqli_query($conn, $checkIinSql);
     if (mysqli_num_rows($checkIinResult) == 0) {
         // insert
-        $insertSql = "INSERT INTO Internship (Name, Description, Is_Gov) VALUES ('$intName', '$intDesc', $intIsGov)";
+        $insertSql = "INSERT INTO Internship (Name, Description, Is_Gov, Location) VALUES ('$intName', '$intDesc', $intIsGov, '$intLocation')";
         if (mysqli_query($conn, $insertSql)) {
             $message = "New internship created successfully";
         } else {
@@ -90,11 +90,15 @@ $internships = mysqli_query($conn, "SELECT * FROM Internship");
                         <input type="text" name="internship-description" id="internship-description" required>
                     </div>
                     <div class="input-label">
-                        <label for="internship-is-gov">Is Gov</label>
+                        <label for="internship-is-gov">Government Internship?</label>
                         <select name="internship-is-gov" id="internship-is-gov" required>
                             <option value="true"> true </option>
                             <option value="false"> false </option>
                         </select>
+                    </div>
+                    <div class="input-label">
+                        <label for="internship-location">Internship Location</label>
+                        <input type="text" name="internship-location" id="internship-location" required>
                     </div>
                     <input type="submit" value="Submit" class="button">
                 </form>
@@ -112,7 +116,8 @@ $internships = mysqli_query($conn, "SELECT * FROM Internship");
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Is_Gov</th>
+                        <th>Federal</th>
+                        <th>Location</th>
                         <th>Action</th>
                     </tr>
                     <?php
@@ -122,11 +127,12 @@ $internships = mysqli_query($conn, "SELECT * FROM Internship");
                             <td>" . $row['Name'] . "</td>
                             <td>" . $row['Description'] . "</td>
                             <td>" . $row['Is_Gov'] . "</td> 
+                            <td>" . $row['Location'] . "</td>
                             <td><a href='?delete=" . $row['Intern_ID'] . "'>Delete</a></td>
                             </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='4'>No internships found</td></tr>";
+                        echo "<tr><td colspan='5'>No internships found</td></tr>";
                     }
                     ?>
                 </table>
