@@ -217,7 +217,7 @@ LEFT JOIN College_Student CS ON T.Student_Num = CS.UIN
 GROUP BY P.Program_Num;
 
 
-/* selects total students completed courses, total students in strategic language, total students in cryptography, total students in data science */
+/* selects total students in strategic language, total students in cryptography, total students in data science */
 CREATE VIEW Course_Certification_Details AS
 SELECT P.Program_Num,
        COUNT(CASE WHEN C.Type = 'Foreign Language' THEN CS.UIN END) AS Students_Foreign_Language,
