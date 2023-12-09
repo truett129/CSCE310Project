@@ -1,4 +1,14 @@
 <?php
+/**
+* This is the admin certification management page. Users can:
+*   Add new certifications
+*   Delete existing certifications
+*   Update certifications
+*   View all certifications
+* @author     pranav
+* ...
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -106,7 +116,7 @@ $certifications = mysqli_query($conn, "SELECT * FROM Certification");
                 <?php endif; ?>
             </div>
 
-            <!-- Display certificationes -->
+            <!-- Display certifications -->
             <section>
                 <h2>Certifications</h2>
                 <table>

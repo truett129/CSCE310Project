@@ -1,4 +1,14 @@
+
 <?php
+/**
+* This is a general portal on our admin page from where we can access specific pages like:
+*   Admin tracks page
+*   Admin classes page
+*   Admin Internship page
+*   Admin Certifications page
+* @author     pranav
+* ...
+*/
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -25,6 +35,7 @@ include_once '../database.php';
     <link rel="stylesheet" href="../css/styles.css" />
 </head>
 
+<!-- Create forms with links to specific progress tracking pages -->
 <body>
     <header>
         <h1>Program Progress Tracking</h1>

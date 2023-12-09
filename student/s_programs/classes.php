@@ -5,6 +5,17 @@ error_reporting(E_ALL);
 
 session_start();
 
+
+/**
+* This is the student classes enrollment page. Users can:
+*   Add new course enrollments
+*   Delete existing course enrollments
+*   Update details like the status of existing course enrollments
+*   View all course enrollments
+* @author     pranav
+* ...
+*/
+
 // Ensure the user is logged in and is a student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not a student.");

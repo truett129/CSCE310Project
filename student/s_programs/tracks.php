@@ -5,6 +5,13 @@ error_reporting(E_ALL);
 
 session_start();
 
+/**
+* This is a student page that will be used to view all
+* tracks that the admin had added them to
+* @author     pranav
+* ...
+*/
+
 // Ensure the user is logged in and is a student
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
     die("Access denied: User not logged in or not a student.");

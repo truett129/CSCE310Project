@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='4'>No programs found</td></tr>";
+                        echo "<tr><td colspan='7'>No programs found</td></tr>";
                     }
                     ?>
                 </table>

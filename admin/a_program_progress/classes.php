@@ -6,6 +6,15 @@ error_reporting(E_ALL);
 session_start();
 
 // Ensure the user is logged in and is an admin
+/**
+* This is the admin classes management page. Users can:
+*   Add new classes
+*   Delete existing classes
+*   Update classes
+*   View all classes
+* @author     pranav
+* ...
+*/
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }

@@ -5,6 +5,16 @@ error_reporting(E_ALL);
 
 session_start();
 
+/**
+* This is the admin internships management page. Users can:
+*   Add new internships
+*   Delete existing internships
+*   Update internships
+*   View all internships
+* @author     pranav
+* ...
+*/
+
 // Ensure the user is logged in and is an admin
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
@@ -45,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['internship-name'], $_P
         }
     } else {
         // Internship class
-        $updateSql = "UPDATE Internship SET Description = '$intDesc', Is_Gov=$intIsGov WHERE Name = '$intName'";
+        $updateSql = "UPDATE Internship SET Description = '$intDesc', Is_Gov=$intIsGov, Location='$intLocation' WHERE Name = '$intName'";
         if (mysqli_query($conn, $updateSql)) {
             $message = "Internship updated successfully";
         } else {
