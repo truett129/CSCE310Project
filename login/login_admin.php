@@ -1,4 +1,14 @@
+
 <?php
+
+/**
+This is a login page for the admin. It checks the username and password against the database and if it is correct, it will log the user in and redirect them to the index page. 
+If the username or password is incorrect, it will display an error message.
+*
+@author Truett Lee
+...
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);

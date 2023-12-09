@@ -1,4 +1,35 @@
 <?php
+
+/**
+ * Document Upload and Management Page
+ * 
+ * This PHP script is designed for the management of documents by students within Texas A&M Cybersecurity system. 
+ * It enables students to upload, update, view, and delete their documents such as resumes and other relevant files.
+ * 
+ * Functionalities:
+ * a. Insert: Allows students to upload documents for program opportunities.
+ *    - Process: Students select a document and upload it to the server. The document's details are stored in the database.
+ * 
+ * b. Update: Enables students to replace or edit details of their uploaded documents.
+ *    - Process: Students select an existing document and can either update its details or replace the file itself.
+ * 
+ * c. Select: Provides students the ability to view a list of their uploaded documents.
+ *    - Process: Fetches and displays documents uploaded by the student from the database.
+ * 
+ * d. Delete: Offers the option to remove a specific document from the system.
+ *    - Process: Deletes the selected document's record from the database and the file from the server, if applicable.
+ * 
+ * @file        s_documents.php
+ * @author      Abdullah Balbaid
+ * @package     student
+ * 
+ * Dependencies: 
+ * - Requires 'database.php' for database connection.
+ * - 'styles.css' for page styling.
+ * Security Note: 
+ * - Utilizes session-based authentication to ensure only authorized students can manage documents.
+ */
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);

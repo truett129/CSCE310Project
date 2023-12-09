@@ -1,4 +1,12 @@
 <?php
+
+/**
+The Student Login page is the page that allows students to login to the system.
+*
+@author   Truett Lee
+...
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -6,7 +14,7 @@ session_start();
 include_once '../database.php';
 
 $message = '';
-
+// CREATED BY: TRUETT LEE
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];

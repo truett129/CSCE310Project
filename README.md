@@ -1,6 +1,9 @@
 # CSCE310Project
 CSCE 310 TAMCC Project
 
+# Youtube link for demonstration
+https://youtu.be/sI1g-WeyaJs
+
 # Setting up the server
 - First xampp must be downloaded on your computer
 - Go into the xampp folder wherever you downloaded it and git clone this repo into the htdocs folder
