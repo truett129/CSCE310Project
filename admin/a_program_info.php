@@ -1,4 +1,13 @@
 <?php
+/**
+* This is the admin page for adding new programs. Users can:
+*   Add new programs
+*   View existing programs
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 session_start();
 

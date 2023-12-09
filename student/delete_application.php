@@ -1,4 +1,14 @@
 <?php
+/**
+* This is the user page for deleting program applications.
+*   Users can:
+*   Delete existing applications
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
+
 include_once '../database.php';
 session_start();
 

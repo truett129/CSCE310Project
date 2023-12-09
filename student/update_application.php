@@ -1,4 +1,13 @@
 <?php
+/**
+* This is the user page for updating program applications. Users can:
+*   Update existing applications with new information
+*   View all of the contents of their existing applications
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 include_once '../database.php';
 session_start();

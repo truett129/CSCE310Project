@@ -1,4 +1,14 @@
 <?php
+/**
+* This is the admin page for deleting new programs. Users can:
+*   Delete existing programs
+*   Set programs as inactive and have them not populate in the dropdown menu
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
+
 session_start();
 
 if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {

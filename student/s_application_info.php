@@ -1,4 +1,13 @@
 <?php
+/**
+*   This is the student page for applying to programs. 
+*   Users can:
+*   Apply to various programs by filling out a form
+*   View all existing applications in a table
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 session_start();
 

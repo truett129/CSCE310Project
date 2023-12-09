@@ -1,4 +1,13 @@
 <?php
+/**
+* This is the admin page for viewing the admin report.
+*   The admin report is a summary of all student information in the program.
+*   
+*   
+*   
+* @author     Anthony Ciardelli
+* ...
+*/
 
 session_start();
 
