@@ -91,7 +91,11 @@ $certifications = mysqli_query($conn, "SELECT * FROM Certification");
                     </div>
                     <div class="input-label">
                         <label for="certification-level">Certification Level</label>
-                        <input type="text" name="certification-level" id="certification-level">
+                        <select name="certification-level" id="certification-level" required>
+                            <option value='Beginner'>In-Progress</option>
+                            <option value='Intermediate'>Intermediate</option>
+                            <option value='Advanced'>Advanced</option>
+                        </select>
                     </div>
                     <input type="submit" value="Submit" class="button">
                 </form>
