@@ -58,6 +58,7 @@ $row = mysqli_fetch_array($result);
                 <h3>Enrollment Information</h3>
                 <?php
 
+                // here I use my created view to pull student demographic information from my database
                 $programParticipation = "SELECT * FROM Program_Participation_Details WHERE Program_Num = $programNumber";
 
                 $result = mysqli_query($conn, $programParticipation);
@@ -76,6 +77,7 @@ $row = mysqli_fetch_array($result);
                 <h3>Student Course Information</h3>
                 <?php
 
+                // this query finds all users that have completed all courses listed
                 $allCoursesCompleted = "SELECT COUNT(DISTINCT CE.UIN) AS All_Courses_Completed
                 FROM Class_Enrollment CE
                 INNER JOIN Classes C ON CE.Class_ID = C.Class_ID
@@ -97,6 +99,7 @@ $row = mysqli_fetch_array($result);
                 </p>
                 <?php
 
+                // i use my other view here to pull course enrollment information
                 $courseEnrollmentQuery = "SELECT * FROM Course_Certification_Details WHERE Program_Num = $programNumber";
 
                 $result = mysqli_query($conn, $courseEnrollmentQuery);
@@ -113,6 +116,8 @@ $row = mysqli_fetch_array($result);
                 </p>
                 <h3>Students in DoD 8570.01M</h3>
                 <?php 
+                
+                // these queries are manual checks for the DoD 8570.01M course and certifications
                 $studentsEnrolled = "SELECT COUNT(DISTINCT CE.UIN) AS Enrolled_Students
                 FROM Class_Enrollment CE
                 JOIN Classes C ON CE.Class_ID = C.Class_ID
@@ -141,9 +146,11 @@ $row = mysqli_fetch_array($result);
                 $row = mysqli_fetch_array($result);
                 echo "<p>Students Certified: " . $row['Certified_Students'] . "</p>";
                 ?>
+
                 <h3>Student Internship Information</h3>
                 <?php
 
+                // some more manual checks on internship information and student major
                 $studentsFedInternship = "SELECT COUNT(DISTINCT IA.UIN) AS Students_Pursuing_Internships
                 FROM Intern_App IA
                 JOIN Internship I ON IA.Intern_ID = I.Intern_ID

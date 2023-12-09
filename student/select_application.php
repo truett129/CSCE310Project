@@ -16,6 +16,7 @@ if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
 }
 include_once '../database.php';
 
+// used for auto populating the form
 $result = mysqli_query($conn, "SELECT * FROM applications WHERE App_Num='" . $_GET['app_num'] . "'");
 if ($result) {
     $row = mysqli_fetch_assoc($result);

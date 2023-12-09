@@ -45,6 +45,7 @@ $row = mysqli_fetch_array($result);
         <div class="content">
             <div class="new-program-form">
                 <h2>Update Program Information</h2>
+                <!-- update form so that this information gets posted whenever the submit button is pressed -->
                 <form action="" method="POST">
                     <label for="Program_Num">Program Number</label>
                     <input type="text" name="Program_Num" id="Program_Num" value="<?php echo $row['Program_Num']; ?>"

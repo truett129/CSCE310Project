@@ -62,8 +62,10 @@ $uin = $row['UIN'];
                         </div>
                         <div class="input-label">
                             <label for="program-name">Program Name</label>
-                            <input type="text" name="program_name" id="program_name" value="<?php
+                            <input type="text" name="program_name" id="program_name" value="
+                            <?php
 
+                            // we set the value of the program name to the program name of the program number
                             $query = "SELECT Name FROM programs WHERE Program_Num = '$programNum'";
                             $result = mysqli_query($conn, $query);
 
@@ -88,7 +90,7 @@ $uin = $row['UIN'];
                             $row = mysqli_fetch_assoc($result);
                         }
                         ?>
-
+                        <!-- autopopulates input forms based on our application -->
                         <div class="input-label">
                             <label for="uncom_cert">Are you currently enrolled in
                                 other uncompleted certifications
@@ -113,6 +115,7 @@ $uin = $row['UIN'];
                                 value="<?php echo isset($row['Purpose_Statement']) ? $row['Purpose_Statement'] : ''; ?>">
                         </div>
                         <input class="button" type="submit" name="delete" value="Delete Application">
+                        <!-- user feedback when we delete -->
                         <p>
                             <?php if (isset($message))
                                 echo $message; ?>

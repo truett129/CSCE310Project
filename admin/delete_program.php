@@ -17,6 +17,7 @@ if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
 include_once '../database.php';
 if (count($_POST) > 0) {
     if (isset($_POST['delete'])) {
+        // performs the different kinds of deletes depending on the status of the program and what button was pressed
         if ($_POST['delete'] === 'Set Inactive') {
             mysqli_query($conn, "UPDATE programs SET Is_Active = 0 WHERE Program_Num='" . $_GET['Program_Num'] . "'");
             $message = "Program marked as inactive";
@@ -29,6 +30,7 @@ if (count($_POST) > 0) {
         }
     }
 }
+// ensures input boxes dont populate with nonsense when deleting
 $result = mysqli_query($conn, "SELECT * FROM programs WHERE Program_Num='" . $_GET['Program_Num'] . "'");
 if($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_array($result);
@@ -61,6 +63,7 @@ else{
         <div class="content">
             <div class="new-program-form">
                 <h2>Update Program Information</h2>
+                <!-- update form to delete or set in active depending on the button press -->
                 <form action="" method="POST">
                     <label for="Program_Num">Program Number</label>
                     <input type="text" name="Program_Num" id="Program_Num" value="<?php echo isset($row['Program_Num']) ? $row['Program_Num'] : ''; ?>"
@@ -73,7 +76,7 @@ else{
                     <input type="text" name="Description" id="Description" value="<?php echo isset($row['Description']) ? $row['Description'] : ''; ?>"
                         readonly>
 
-                    <!-- Soft delete form -->
+                    <!-- here we soft delete by setting the program to inactive -->
                     <form action="" method="POST">
                     <?php
                         if ($row['Is_Active'] == 1) {
@@ -84,7 +87,7 @@ else{
                         ?>
                     </form>
 
-                    <!-- Hard delete form -->
+                    <!-- hard delete by completely getting rid of the program -->
                     <form action="" method="POST">
                         <input class="button" name="delete" type="submit" value="Delete">
                     </form>
