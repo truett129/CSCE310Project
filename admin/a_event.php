@@ -1,4 +1,27 @@
 <?php
+
+/**
+ * Event Management Page for Texas A&M Cybersecurity System
+ * 
+ * This PHP script is designed to manage events as part of Texas A&M Cybersecurity system.
+ * It facilitates admin users to create, update, and view events, interacting with the database to handle these operations.
+ * 
+ * Functionalities:
+ * 1. Create Event: Adds a new event to the system. It captures details such as program number, start date, time, location, end date, and event type.
+ * 2. Edit Event: Modifies details of an existing event, including student attendance, using the event ID.
+ * 3. View Events: Retrieves and displays information about all events or specific events based on certain criteria.
+ * 
+ * @file        a_event.php
+ * @author      Abdullah Balbaid
+ * @package     admin
+ * 
+ * Dependencies: 
+ * - Requires 'database.php' for database connection.
+ * - 'styles.css' for page styling.
+ * Security Note: 
+ * - Uses session-based authentication. 
+ */
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -11,7 +34,7 @@ if(!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
 
-include_once '../database.php'; // Adjust the path as needed
+include_once '../database.php';
 
 $message = '';
 $error = '';
@@ -29,7 +52,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
     }
 }
 
-// Handle Event Insertion, Update, and Deletion
+// Handle Event Insertion, Update
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Validate input fields
@@ -44,7 +67,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO Event (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type) VALUES ('$uin', '$programNum', '$startDate', '$time', '$location', '$endDate', '$eventType')";
         $action = 'insert';
     } else {
-        $action='updated';
+        $action = 'updated';
         $val = $_POST['eid'];
         $sql = "UPDATE Event SET UIN='$uin', Program_Num='$programNum', Start_Date='$startDate', Time='$time', Location='$location', End_Date='$endDate', Event_Type='$eventType'
         WHERE Event_ID=$val";
@@ -55,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $error = "Database error: ".mysqli_error($conn);
     }
-    
+
 }
 
 // Fetch Events for Display
@@ -91,6 +114,7 @@ $events = mysqli_query($conn, $sql);
                         <label for="program_num">Program Name</label>
                         <select name="program_num" id="program_num" required>
                             <?php
+                            // Fetch active programs 
                             $result = mysqli_query($conn, "SELECT Program_Num, Name FROM programs WHERE Is_Active = 1");
                             if(mysqli_num_rows($result) > 0) {
                                 while($row = mysqli_fetch_assoc($result)) {

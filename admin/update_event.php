@@ -1,4 +1,28 @@
+<!-- Event Attendance -->
 <?php
+
+/**
+ * Event Attendance Management Page for Texas A&M Cybersecurity System
+ * 
+ * This PHP script is designed for managing event attendance as part of Texas A&M Cybersecurity system.
+ * It enables admin users to update attendance for events and view the current list of attendees.
+ * 
+ * Functionalities:
+ * 1. View Attendance: Retrieves and displays a list of attendees for a specific event.
+ * 2. Add Attendee: Allows admin to add a student to the event's attendance list.
+ * 3. Remove Attendee: Provides functionality to remove a student from the event's attendance list.
+ * 
+ * @file        update_event.php
+ * @author      Abdullah Balbaid
+ * @package     admin/event
+ * 
+ * Dependencies: 
+ * - Requires 'database.php' for database connection.
+ * - 'styles.css' for page styling.
+ * Security Note: 
+ * - Uses session-based authentication. 
+ */
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -11,14 +35,15 @@ if(!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'admin') {
     die("Access denied: User not logged in or not an admin.");
 }
 
-if (!isset($_GET['event_id']) || !$_GET['event_id']) {
+if(!isset($_GET['event_id']) || !$_GET['event_id']) {
     die("Invalid request!");
 }
 
-include_once '../database.php'; // Adjust the path as needed
+include_once '../database.php';
 
 $message = '';
 $error = '';
+
 
 $event_id = $_GET['event_id'];
 
@@ -29,7 +54,7 @@ $events = mysqli_query($conn, $sql);
 // Handle Event Deletion
 if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
     $UIN = $_GET['delete'];
-    
+
     $deleteSql = "DELETE FROM Event_Tracking WHERE UIN=$UIN";
     if(mysqli_query($conn, $deleteSql)) {
         $message = "User deleted successfully";
@@ -41,16 +66,16 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['delete'])) {
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
-    if (!isset($_POST['action'])) {
+
+    if(!isset($_POST['action'])) {
         die("Invalid action!");
     }
     $act = $_POST['action'];
-    if ($act == 'attendance') {
+    if($act == 'attendance') {
         $user = $_POST['UIN'];
         $user_exists = mysqli_query($conn, "SELECT * FROM Event_Tracking WHERE UIN='$user'");
 
-        if (mysqli_num_rows($user_exists) == 0) {
+        if(mysqli_num_rows($user_exists) == 0) {
             $insert = "INSERT INTO Event_Tracking (Event_ID, UIN) VALUES('$event_id', '$user')";
             if(mysqli_query($conn, $insert)) {
                 $message = "User added successfully";
@@ -75,11 +100,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Management</title>
-    <link rel="stylesheet" href="../css/styles.css" /> <!-- Ensure correct path to style.css -->
+    <link rel="stylesheet" href="../css/styles.css" />
 </head>
 
 <body>
-    
+
     <header>
         <h1>Update Event</h1>
         <div class="header-links"><a href="./a_event.php" class="button">Back to event management</a></div>
@@ -142,7 +167,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </td>
                                 </tr>";
                             }
-                            
+
                         }
                     } else {
                         echo "<tr><td colspan='5'>No students found</td></tr>";
