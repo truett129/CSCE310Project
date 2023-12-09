@@ -220,7 +220,6 @@ GROUP BY P.Program_Num;
 /* selects total students completed courses, total students in strategic language, total students in cryptography, total students in data science */
 CREATE VIEW Course_Certification_Details AS
 SELECT P.Program_Num,
-       COUNT(CASE WHEN CE.Status = 'Completed' THEN CS.UIN END) AS Students_Completed_All_Courses,
        COUNT(CASE WHEN C.Type = 'Foreign Language' THEN CS.UIN END) AS Students_Foreign_Language,
        COUNT(CASE WHEN C.Name LIKE '%cryptography%' THEN CS.UIN END) AS Students_Cryptography,
        COUNT(CASE WHEN C.Description LIKE '%data science%' THEN CS.UIN END) AS Students_Data_Science
