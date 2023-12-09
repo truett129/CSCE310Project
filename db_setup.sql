@@ -205,6 +205,7 @@ ON Intern_App(UIN);
 
 /* Student Reports Views */
 
+<<<<<<< HEAD
 /* selects total students in the program, minority students, and k12 students */
 CREATE VIEW Program_Participation_Details AS
 SELECT P.Program_Num,
@@ -232,3 +233,19 @@ LEFT JOIN Classes C ON CE.Class_ID = C.Class_ID
 GROUP BY P.Program_Num;
 
 CREATE INDEX Active_Program ON programs(Is_Active);
+=======
+-- Create View for program application for all applications, used in student s_document.php
+CREATE VIEW ApplicationsProgramsView AS
+SELECT
+    applications.App_Num,
+    applications.UIN,
+    programs.Name
+FROM
+    applications
+JOIN
+    programs ON applications.Program_Num = programs.Program_Num;
+
+-- Creates an index on the Applications table to improve query efficiency involving 'App_Num' and 'UIN'.
+CREATE INDEX UIN_APPNUM
+ON Applications(App_Num, UIN);
+>>>>>>> main

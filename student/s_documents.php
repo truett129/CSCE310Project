@@ -5,14 +5,14 @@ error_reporting(E_ALL);
 
 session_start();
 
-// Ensure the user is logged in and is an student
-if (!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
-    die("Access denied: User not logged in or not an student.");
+// Ensure the user is logged in and is a student
+if(!isset($_SESSION['userRole']) || $_SESSION['userRole'] != 'student') {
+    die("Access denied: User not logged in or not a student.");
 }
 
-// Ensure the user is logged in and has a UIN set in the session
-if (!isset($_SESSION['UIN'])) {
-    die("User not logged in or UIN not set");
+// Ensure the user has a UIN set in the session
+if(!isset($_SESSION['UIN'])) {
+    die("User not logged in or UIN not set.");
 }
 
 $uin = $_SESSION['UIN'];
@@ -21,48 +21,83 @@ include_once '../database.php';
 
 $message = '';
 
-// File Upload
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['document'])) {
-    if (isset($_POST['app_num']) && is_numeric($_POST['app_num']) && isset($_POST['doc_type'])) {
+// Check for Update Request
+$updateDoc = null;
+if(isset($_GET['update'])) {
+    $docNum = $_GET['update'];
+    $updateSql = "SELECT * FROM Document WHERE Doc_Num = $docNum";
+    $updateResult = mysqli_query($conn, $updateSql);
+    if(mysqli_num_rows($updateResult) > 0) {
+        $updateDoc = mysqli_fetch_assoc($updateResult);
+    }
+}
+
+// Process File Upload or Update
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Update Document
+    if(isset($_POST['doc_num']) && is_numeric($_POST['doc_num'])) {
+        $docNum = $_POST['doc_num'];
+        $docType = $_POST['doc_type'];
         $appNum = $_POST['app_num'];
-        // Check if the application number is linked to the user
-        $appCheckSql = "SELECT * FROM Applications WHERE App_Num = $appNum AND UIN = $uin";
-        $appCheckResult = mysqli_query($conn, $appCheckSql);
-        if (mysqli_num_rows($appCheckResult) > 0) {
-            // Application belongs to the user, proceed with upload
+
+        // Initialize SQL query for update
+        $updateSql = "UPDATE Document SET Doc_Type = '$docType', App_Num = '$appNum'";
+
+        // Check if a new file is uploaded
+        if(isset($_FILES['document']) && $_FILES['document']['error'] == 0) {
             $filename = $_FILES['document']['name'];
             $tempname = $_FILES['document']['tmp_name'];
-            $folder = "../uploads/" . $filename;
-            $docType = $_POST['doc_type'];
+            $folder = "../uploads/".$filename;
 
-            if (move_uploaded_file($tempname, $folder)) {
+            // Move the new file and update the SQL query
+            if(move_uploaded_file($tempname, $folder)) {
+                $updateSql .= ", Link = '$filename'";
+            } else {
+                $message = "Failed to upload new file.";
+            }
+        }
+
+        // Finalize and execute the update query
+        $updateSql .= " WHERE Doc_Num = $docNum";
+        if(mysqli_query($conn, $updateSql)) {
+            $message = "Document updated successfully";
+        } else {
+            $message = "Error updating document: ".mysqli_error($conn);
+        }
+    }
+    // Upload New Document
+    elseif(isset($_FILES['document']) && $_FILES['document']['error'] == 0) {
+        if(isset($_POST['app_num']) && is_numeric($_POST['app_num']) && isset($_POST['doc_type'])) {
+            $appNum = $_POST['app_num'];
+            $docType = $_POST['doc_type'];
+            $filename = $_FILES['document']['name'];
+            $tempname = $_FILES['document']['tmp_name'];
+            $folder = "../uploads/".$filename;
+
+            if(move_uploaded_file($tempname, $folder)) {
                 $sql = "INSERT INTO Document (App_Num, Link, Doc_Type) VALUES ($appNum, '$filename', '$docType')";
-                if (mysqli_query($conn, $sql)) {
+                if(mysqli_query($conn, $sql)) {
                     $message = "File uploaded successfully";
                 } else {
-                    $message = "Error: " . $sql . "<br>" . mysqli_error($conn);
+                    $message = "Error: ".$sql."<br>".mysqli_error($conn);
                 }
             } else {
                 $message = "Failed to upload file";
             }
         } else {
-            $message = "Invalid application number or not authorized";
+            $message = "Application number must be a number, or document type not set";
         }
-    } else {
-        $message = "Application number must be a number or document type not set";
     }
-} else {
-    $message = "No file selected or incorrect request method";
 }
 
 // Delete Document
-if (isset($_GET['delete'])) {
+if(isset($_GET['delete'])) {
     $docNum = $_GET['delete'];
     $sql = "DELETE FROM Document WHERE Doc_Num = $docNum";
-    if (mysqli_query($conn, $sql)) {
+    if(mysqli_query($conn, $sql)) {
         $message = "Document deleted successfully";
     } else {
-        $message = "Error deleting document: " . mysqli_error($conn);
+        $message = "Error deleting document: ".mysqli_error($conn);
     }
 }
 
@@ -73,6 +108,8 @@ $sql = "SELECT Document.* FROM Document
 
 $documents = mysqli_query($conn, $sql);
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,32 +129,40 @@ $documents = mysqli_query($conn, $sql);
     </header>
     <div class="container">
         <div class="content">
-            <!-- Upload Document Section -->
+            <!-- Upload/Update Document Section -->
             <div class="new-program-form">
-                <h2>Upload Document</h2>
+                <h2>
+                    <?php echo isset($updateDoc) ? 'Update Document' : 'Upload Document'; ?>
+                </h2>
                 <form action="" method="POST" enctype="multipart/form-data">
+                    <?php if(isset($updateDoc)): ?>
+                        <input type="hidden" name="doc_num" value="<?php echo $updateDoc['Doc_Num']; ?>">
+                    <?php endif; ?>
+
                     <div class="input-label">
-                        <input type="file" name="document" required>
+                        <input type="file" name="document" <?php echo isset($updateDoc) ? '' : 'required'; ?>>
                     </div>
                     <div class="input-label">
                         <label for="app_num">Application Number</label>
                         <select name="app_num" id="app_num" required>
                             <?php
                             $result = mysqli_query($conn, "SELECT App_Num, Name FROM ApplicationsProgramsView WHERE UIN = $uin");
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['App_Num'] . "'>" . $row['App_Num'] . " - " . $row['Name'] . "</option>";
+                            if(mysqli_num_rows($result) > 0) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                                    $isSelected = isset($updateDoc) && $updateDoc['App_Num'] == $row['App_Num'] ? 'selected' : '';
+                                    echo "<option value='".$row['App_Num']."' $isSelected>".$row['App_Num']." - ".$row['Name']."</option>";
                                 }
                             }
                             ?>
                         </select>
                     </div>
                     <div class="input-label">
-                        <input type="text" name="doc_type" placeholder="Document Type" required>
+                        <input type="text" name="doc_type" placeholder="Document Type" required
+                            value="<?php echo isset($updateDoc) ? $updateDoc['Doc_Type'] : ''; ?>">
                     </div>
-                    <input type="submit" value="Upload">
+                    <input type="submit" class="button" value="<?php echo isset($updateDoc) ? 'Update' : 'Upload'; ?>">
                 </form>
-                <?php if (!empty($message)): ?>
+                <?php if(!empty($message)): ?>
                     <div class="message">
                         <?php echo $message; ?>
                     </div>
@@ -136,14 +181,17 @@ $documents = mysqli_query($conn, $sql);
                         <th>Action</th>
                     </tr>
                     <?php
-                    if (mysqli_num_rows($documents) > 0) {
-                        while ($row = mysqli_fetch_assoc($documents)) {
+                    if(mysqli_num_rows($documents) > 0) {
+                        while($row = mysqli_fetch_assoc($documents)) {
                             echo "<tr>
-                            <td>" . $row['Doc_Num'] . "</td>
-                            <td>" . $row['App_Num'] . "</td>
-                            <td><a href='../uploads/" . $row['Link'] . "' target='_blank'>" . $row['Link'] . "</a></td>
-                            <td>" . $row['Doc_Type'] . "</td>
-                            <td><a href='?delete=" . $row['Doc_Num'] . "'>Delete</a></td>
+                                <td>".$row['Doc_Num']."</td>
+                                <td>".$row['App_Num']."</td>
+                                <td><a href='../uploads/".$row['Link']."' target='_blank'>".$row['Link']."</a></td>
+                                <td>".$row['Doc_Type']."</td>
+                                <td>
+                                    <a href='?update=".$row['Doc_Num']."'>Update</a> |
+                                    <a href='?delete=".$row['Doc_Num']."'>Delete</a>
+                                </td>
                             </tr>";
                         }
                     } else {
@@ -152,6 +200,10 @@ $documents = mysqli_query($conn, $sql);
                     ?>
                 </table>
             </section>
+
+            <?php if(isset($updateDoc)): ?>
+                <a href="s_documents.php" class="button">upload new document</a>
+            <?php endif; ?>
         </div>
     </div>
 
