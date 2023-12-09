@@ -213,3 +213,7 @@ FROM
     applications
 JOIN
     programs ON applications.Program_Num = programs.Program_Num;
+
+-- Creates an index on the Applications table to improve query efficiency involving 'App_Num' and 'UIN'.
+CREATE INDEX UIN_APPNUM
+ON Applications(App_Num, UIN);
